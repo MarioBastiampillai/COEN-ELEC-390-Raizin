@@ -1,11 +1,17 @@
 package com.example.mario.raizin;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.CountDownTimer;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -113,4 +119,15 @@ public class HomeFeed extends AppCompatActivity {
         }catch(Exception exception){}
         Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
     }
+
+    void pushNotification(String title, String content) {
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(true);
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
 }
