@@ -1,11 +1,17 @@
 package com.example.mario.raizin;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.CountDownTimer;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,17 +30,6 @@ public class HomeFeed extends AppCompatActivity {
 
     Button generalInformationButton;
     Button timeOutsideButton;
-    TextView uvIndexObject;
-    TextView recommendedSPFLevelObject;
-    String uvIntensity="";
-    Button logoutButton;
-    TextView recommendedIntervalOfApplicationObject;
-    TextView skinTypeDisplayObject;
-    TextView skinToneDisplayObject;
-    String[] skinTipOily=new String[10];
-    String[] skinTipDry=new String[10];
-    String[] skinTipCombination=new String[10];
-    String[] skinTipNormal=new String[10];
 
     // nick bluetooth
     BluetoothAdapter bluetoothAdapter = null;
@@ -57,58 +52,13 @@ public class HomeFeed extends AppCompatActivity {
         setContentView(R.layout.activity_home_feed);
         generalInformationButton=(Button)findViewById(R.id.generalInfoButtonID);
         timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
-        uvIndexObject=(TextView)findViewById(R.id.uvIndexTextViewID);
-        recommendedSPFLevelObject=(TextView)findViewById(R.id.recommendedSPFLevelID);
-        logoutButton=(Button)findViewById(R.id.logoutID);
-        recommendedIntervalOfApplicationObject=(TextView)findViewById(R.id.recommendedIntervalOfApplication);
-        recommendedSPFLevelObject.setVisibility(View.VISIBLE);
-        skinTypeDisplayObject=(TextView)findViewById(R.id.skinTypeDisplay);
-        skinToneDisplayObject=(TextView)findViewById(R.id.skinToneID);
+        uvButton = (Button)findViewById(R.id.uvButton);
 
-        Intent inSkinType=getIntent();
-        String spfFactor=inSkinType.getStringExtra("spfFactor");
-        recommendedSPFLevelObject.setText("Recommended SPF Level: "+spfFactor);
-        String skinType=inSkinType.getStringExtra("skinTypeChosen");
-        String skinTone=inSkinType.getStringExtra("skinToneSelected");
-        skinToneDisplayObject.setText("Skin tone: "+skinTone);
-        skinTypeDisplayObject.setText("Skin Type: "+skinType);
-        int estimatedTime=inSkinType.getIntExtra("estimatedTime",0);
-        Toast.makeText(getApplicationContext(), "Estimated Time without UV index consideration"+estimatedTime, Toast.LENGTH_SHORT).show();
-        SQLiteDatabase myDataBase = openOrCreateDatabase("Database", MODE_PRIVATE, null);
-
-        myDataBase.execSQL("CREATE TABLE IF NOT EXISTS UserSkinSelectionTable(spf VARCHAR, type VARCHAR, tone VARCHAR);");
-        myDataBase.execSQL("INSERT INTO UserSkinSelectionTable VALUES('"+spfFactor+"', '"+skinType+"', '"+skinTone+"' );");
-
-        recommendedSPFLevelObject.setText("Recommended SPF Level: "+spfFactor);
-        if(skinType=="Oily")
-        {
-            //Tips for oily skin here
-            //then randomly choose from them
-            //source: https://health.howstuffworks.com/skin-care/beauty/sun-care/quick-tips-best-sunscreens-for-oily-skin.htm
-            //https://www.verywellhealth.com/how-to-choose-sunscreen-for-acne-prone-skin-15916
-            skinTipOily[0]="Look for oil-free and waterbased sunscreen products when conducting your purchases, this will hellp prevent your pores from clogging";
-            skinTipOily[1]="It is preferable to select gels in terms of skin care products since they are quickly absorbed into the skin.";
-            skinTipOily[2]="Use a cleanser containing salyscylic acid often in order to remove excess oil from the surface of your skin.";
-
-        }
-        else if(skinType=="Dry")
-        {
-            //Tips for dry skin here
-            //then randomly choose from them
-            //source:https://www.verywellhealth.com/how-to-choose-sunscreen-for-acne-prone-skin-15916
-            //source:https://www.cbc.ca/life/style/choosing-the-right-sunscreen-for-your-skin-type-1.4736900
-            skinTipDry[0]="Sunscreen lotions or creams are highly recommended for dry skin.";
-            skinTipDry[1]="It is important to constantly moisturize your skin, make sure to apply the sunscreen first before applying the moisturizer.";
-            skinTipDry[2]="Look for skin products that are lacking in zinc oxide, which is known to dry skin and instead look for products constaining glycerins and oils.";
-        }
-        else if(skinType=="Combination")
-        {
-            skinTipCombination[0]="Look for oil-free and waterbased sunscreen products when conducting your purchases, this will hellp prevent your pores from clogging";
-            skinTipCombination[1]="For oily areas of skin, it is preferable to select gels in terms of skin care products since they are quickly absorbed into the skin.";
-            skinTipCombination[2]="Sunscreen lotions or creams are highly recommended for dry skin areas.";
-            skinTipCombination[3]="It is important to constantly moisturize your dry skin, make sure to apply the sunscreen first before applying the moisturizer.";
-            skinTipCombination[4]="Refrain from applying skin products that contain zinc oxide to dry skin areas, which is known to further dry skin and instead look for products constaining glycerins and oils.";
-        }
+        uvButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View arg0) {
+                getInputData();
+            }
+        });
 
         generalInformationButton.setOnClickListener(new View.OnClickListener() {
 
@@ -126,60 +76,9 @@ public class HomeFeed extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                Intent intent = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
-                startActivity(intent);
-            }
-        });
-        //generate a random UV index level between 0 and 11
-        Random randomNumberObject=new Random();
-        int randomNumber= randomNumberObject.nextInt(12);
-
-        if(randomNumber>0&&randomNumber<=2)
-        {
-
-            uvIndexObject.setText("                            UV index:"+randomNumber+"\n The UV index exposure category is low");
-            uvIntensity="low";
-            //if the UV index is low, no change to the estimated duration
-            recommendedIntervalOfApplicationObject.setText("Interval of sunscreen application: "+estimatedTime+" hours");
-        }
-        else if(randomNumber>=3&&randomNumber<=5)
-        {
-            uvIndexObject.setText("                           UV index:"+randomNumber+"\n The UV index exposure category is moderate");
-            uvIntensity="moderate";
-            //if the UV index is moderate, no change to the estimated duration
-            recommendedIntervalOfApplicationObject.setText("Interval of sunscreen application: "+estimatedTime+" hours");
-        }
-        else if(randomNumber>=6&&randomNumber<=7)
-        {
-            uvIndexObject.setText("                           UV index:"+randomNumber+"\n The UV index exposure category is high");
-            uvIntensity="high";
-            //if the UV index is high, decrease the estimated duration by 1 hour
-            recommendedIntervalOfApplicationObject.setText("Interval of sunscreen application: "+(estimatedTime-1)+" hours");  //was estimatedTime-1
-        }
-        else if(randomNumber>=8&&randomNumber<=10)
-        {
-            uvIndexObject.setText("                           UV index:"+randomNumber+"\n The UV index exposure category is very high");
-            uvIntensity="very high";
-            //if the UV index is very high, decrease the estimated duration by 2 hours
-            recommendedIntervalOfApplicationObject.setText("Interval of sunscreen application: "+(estimatedTime-2)+" hours");
-        }
-        else if(randomNumber>=11)
-        {
-
-            uvIndexObject.setText("                           UV index:"+randomNumber+"\n The UV index exposure category is extreme");
-            uvIntensity="extreme";
-            //if the UV index is extreme, decrease the estimated duration by 4 hours
-            recommendedIntervalOfApplicationObject.setText("Interval of sunscreen application: "+(estimatedTime-4)+" hours");
-        }
-        if(randomNumber==0)
-        {
-            //make the time outside button invisible
-            timeOutsideButton.setVisibility(View.INVISIBLE);
-        }
-
+        try{
+            connectBluetoothDevice();
+        }catch(Exception exception){}
 
     }
     //Find all bluetooth pairs and get their address and name
@@ -220,4 +119,15 @@ public class HomeFeed extends AppCompatActivity {
         }catch(Exception exception){}
         Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
     }
+
+    void pushNotification(String title, String content) {
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(true);
+        mNotificationManager.notify(0, mBuilder.build());
+    }
+
 }

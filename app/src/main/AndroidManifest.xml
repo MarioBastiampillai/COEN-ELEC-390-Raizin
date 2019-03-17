@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -21,15 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginorSignUpActivity" android:screenOrientation="portrait" />
-        <activity
-            android:name=".userInfo"
-            android:parentActivityName=".LoginorSignUpActivity" android:screenOrientation="portrait" />
-        <activity android:name=".SkinTypeDeterminationActivity" android:screenOrientation="portrait" />
         <activity android:name=".HomeFeed" android:screenOrientation="portrait" />
         <activity android:name=".GeneralInformationActivity" android:screenOrientation="portrait" />
         <activity android:name=".TimeOutsideActivity" android:screenOrientation="portrait" />
-        <activity android:name=".SkinTypeDeterminationActivityContinuation" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
