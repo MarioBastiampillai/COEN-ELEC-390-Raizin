@@ -18,6 +18,7 @@ public class TimeOutsideActivity extends AppCompatActivity {
     String timeOutside="";
     int timeOutsideNumber;
 
+    public static final String EXTRA_TIME_OUTSIDE = "com.example.mario.raizin.EXTRA_TIME_OUTSIDE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class TimeOutsideActivity extends AppCompatActivity {
         startTimerObject.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-
+/*
                 //estimatedTimeOfSunscreenDuration in minutes
                 //30 second timer
                 //need to pass the time outside variable as milliseconds in here
@@ -93,7 +94,11 @@ public class TimeOutsideActivity extends AppCompatActivity {
                         v.vibrate(4000);
                     }
                 }.start();
+*/
 
+                Intent intent = new Intent(getApplicationContext(), Timer.class);
+                intent.putExtra(EXTRA_TIME_OUTSIDE,timeOutsideNumber);
+                startActivity(intent);
 
             }
         });

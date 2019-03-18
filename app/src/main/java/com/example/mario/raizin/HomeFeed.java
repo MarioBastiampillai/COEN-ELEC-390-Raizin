@@ -41,6 +41,17 @@ public class HomeFeed extends AppCompatActivity {
     static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     int measuredUVIndex = -1;
 
+    private TextView countDownText;
+    private Button countdownButton;
+
+    private CountDownTimer countdownTimer;
+    private long timeLeftInMilliseconds; //SET this variable with max timer time
+    private boolean timerRunning;
+
+    public int totalTimeOutsideMilli;
+    public int totalReapplyTimeMilli;
+    String callingActivity;
+
     public void onBackPressed() {
         //super.onBackPressed();
         // dont call **super**, if u want disable back button in current screen.
@@ -53,6 +64,33 @@ public class HomeFeed extends AppCompatActivity {
         generalInformationButton=(Button)findViewById(R.id.generalInfoButtonID);
         timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
         uvButton = (Button)findViewById(R.id.uvButton);
+
+        countDownText = findViewById(R.id.countdown_text);
+
+        Intent intent = getIntent();
+
+        callingActivity = intent.getStringExtra("FROM_ACTIVITY");
+        String callingActivity2 = "" + callingActivity;
+        System.out.println("NICK HERES THE CALLING ACTIVITY:");
+        System.out.println(callingActivity);
+        int timerStart;
+
+        if(callingActivity2.length() == 11){
+            totalTimeOutsideMilli= intent.getIntExtra(Timer.EXTRA_TIME_OUTSIDE, 0);
+            totalReapplyTimeMilli = intent.getIntExtra(Timer.EXTRA_REAPPLY_TIME, 0);
+            timerStart = intent.getIntExtra(Timer.EXTRA_START_TIMER, 0);
+        }
+        else{
+            totalTimeOutsideMilli= intent.getIntExtra(CustomTimer.EXTRA_TIME_OUTSIDE, 0);
+            totalReapplyTimeMilli = intent.getIntExtra(CustomTimer.EXTRA_REAPPLY_TIME, 0);
+            timerStart = intent.getIntExtra(CustomTimer.EXTRA_START_TIMER, 0);
+        }
+
+
+        if(timerStart == 1){
+            reapplyTimerSetup(totalReapplyTimeMilli);
+        }
+        
 
         uvButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0) {
@@ -128,6 +166,53 @@ public class HomeFeed extends AppCompatActivity {
                 .setContentText(content)
                 .setAutoCancel(true);
         mNotificationManager.notify(0, mBuilder.build());
+    }
+
+
+
+    public void startTimer(){
+        countdownTimer = new CountDownTimer(timeLeftInMilliseconds, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMilliseconds = millisUntilFinished;
+                updateTimer();
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+        timerRunning = !timerRunning;
+    }
+
+    public void stopTimer(){
+        countdownTimer.cancel();
+        timerRunning = !timerRunning;
+        countDownText.setText("");
+
+    }
+
+    public void updateTimer(){
+        int minutes = (int) timeLeftInMilliseconds/60000;
+        int seconds = (int) timeLeftInMilliseconds % 60000 / 1000;
+
+        String timeleftText;
+        timeleftText = "" + minutes;
+        timeleftText += ":";
+        if(seconds < 10)
+            timeleftText += "0";
+        timeleftText += seconds;
+
+        countDownText.setText(timeleftText);
+        if(countDownText.getText().equals("0:00")){
+            pushNotification("reapply bitch", "lol");
+        }
+    };
+
+    public void reapplyTimerSetup(int reapplyTime){
+        timeLeftInMilliseconds = reapplyTime;
+        startTimer();
     }
 
 }
