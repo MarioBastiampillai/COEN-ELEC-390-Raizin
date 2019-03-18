@@ -42,10 +42,13 @@ public class HomeFeed extends AppCompatActivity {
     int measuredUVIndex = -1;
 
     private TextView countDownText;
-    private Button countdownButton;
+    private TextView timeOutsideText;
+    private TextView timeOutsideTimerTextView;
+    private TextView timeUntilReapplyTextView;
 
     private CountDownTimer countdownTimer;
-    private long timeLeftInMilliseconds; //SET this variable with max timer time
+    private long timeLeftInMilliReapply; //SET this variable with max timer time
+    private long timeLeftInMilliTimeOutside; //set this variable with time outside
     private boolean timerRunning;
 
     public int totalTimeOutsideMilli;
@@ -66,6 +69,9 @@ public class HomeFeed extends AppCompatActivity {
         uvButton = (Button)findViewById(R.id.uvButton);
 
         countDownText = findViewById(R.id.countdown_text);
+        timeOutsideText = findViewById(R.id.timeOutsideText);
+        timeUntilReapplyTextView = findViewById(R.id.timeUntilReapplyTextView);
+        timeOutsideTimerTextView = findViewById(R.id.timeOutsideTimerTextView);
 
         Intent intent = getIntent();
 
@@ -88,9 +94,10 @@ public class HomeFeed extends AppCompatActivity {
 
 
         if(timerStart == 1){
-            reapplyTimerSetup(totalReapplyTimeMilli);
+            TimerSetup("reapply", totalReapplyTimeMilli);
+            TimerSetup("timeOutside", totalTimeOutsideMilli);
         }
-        
+
 
         uvButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0) {
@@ -170,49 +177,91 @@ public class HomeFeed extends AppCompatActivity {
 
 
 
-    public void startTimer(){
-        countdownTimer = new CountDownTimer(timeLeftInMilliseconds, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeLeftInMilliseconds = millisUntilFinished;
-                updateTimer();
-            }
+    public void startTimer(String timer){
+        if(timer == "reapply"){
+            countdownTimer = new CountDownTimer(timeLeftInMilliReapply, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    timeLeftInMilliReapply = millisUntilFinished;
+                    updateTimer("reapply");
+                }
 
-            @Override
-            public void onFinish() {
+                @Override
+                public void onFinish() {
 
-            }
-        }.start();
-        timerRunning = !timerRunning;
-    }
-
-    public void stopTimer(){
-        countdownTimer.cancel();
-        timerRunning = !timerRunning;
-        countDownText.setText("");
-
-    }
-
-    public void updateTimer(){
-        int minutes = (int) timeLeftInMilliseconds/60000;
-        int seconds = (int) timeLeftInMilliseconds % 60000 / 1000;
-
-        String timeleftText;
-        timeleftText = "" + minutes;
-        timeleftText += ":";
-        if(seconds < 10)
-            timeleftText += "0";
-        timeleftText += seconds;
-
-        countDownText.setText(timeleftText);
-        if(countDownText.getText().equals("0:00")){
-            pushNotification("reapply bitch", "lol");
+                }
+            }.start();
         }
+        else{
+            countdownTimer = new CountDownTimer(timeLeftInMilliTimeOutside, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    timeLeftInMilliTimeOutside = millisUntilFinished;
+                    updateTimer("timeOutside");
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
+        }
+
+
+    }
+
+
+
+
+
+    public void updateTimer(String timer){
+        if(timer == "reapply"){
+            int minutes = (int) timeLeftInMilliReapply/60000;
+            int seconds = (int) timeLeftInMilliReapply % 60000 / 1000;
+
+            String timeleftText;
+            timeleftText = "" + minutes;
+            timeleftText += ":";
+            if(seconds < 10)
+                timeleftText += "0";
+            timeleftText += seconds;
+
+            countDownText.setText(timeleftText);
+            if(countDownText.getText().equals("0:00")){
+                pushNotification("reapply bitch", "lol");
+                if(timeLeftInMilliTimeOutside > totalReapplyTimeMilli)
+                    TimerSetup("reapply", totalReapplyTimeMilli);
+            }
+        }
+        else{
+            int minutes = (int) timeLeftInMilliTimeOutside/60000;
+            int seconds = (int) timeLeftInMilliTimeOutside % 60000 / 1000;
+
+            String timeleftText;
+            timeleftText = "" + minutes;
+            timeleftText += ":";
+            if(seconds < 10)
+                timeleftText += "0";
+            timeleftText += seconds;
+
+            timeOutsideText.setText(timeleftText);
+            if(timeOutsideText.getText().equals("0:00")){
+                pushNotification("Finished!", "Your outdoor sesssion is complete.");
+            }
+        }
+
     };
 
-    public void reapplyTimerSetup(int reapplyTime){
-        timeLeftInMilliseconds = reapplyTime;
-        startTimer();
+    public void TimerSetup(String timer, int time){
+        if(timer == "reapply"){
+            timeLeftInMilliReapply = time;
+            startTimer(timer);
+            timeUntilReapplyTextView.setText("Time until next Reapply:");
+        }
+        else{
+            timeLeftInMilliTimeOutside = time;
+            startTimer(timer);
+            timeOutsideTimerTextView.setText("Remaining time in outdoor session:");
+        }
     }
-
 }
