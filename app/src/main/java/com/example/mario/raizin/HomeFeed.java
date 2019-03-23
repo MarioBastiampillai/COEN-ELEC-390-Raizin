@@ -27,6 +27,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.example.mario.raizin.DeviceList.EXTRA_ADDRESS;
+
 public class HomeFeed extends AppCompatActivity {
 
     Button generalInformationButton;
@@ -35,6 +37,7 @@ public class HomeFeed extends AppCompatActivity {
 
     // nick bluetooth
     BluetoothAdapter bluetoothAdapter = null;
+    BluetoothAdapter myBluetooth= null;
     BluetoothSocket bluetoothSocket = null;
     Set<BluetoothDevice> pairedBluetoothDevices;
     String bluetoothAddress = null;
@@ -81,6 +84,7 @@ public class HomeFeed extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        bluetoothAddress = intent.getStringExtra(DeviceList.EXTRA_ADDRESS);
         callingActivity = intent.getStringExtra("FROM_ACTIVITY");
         String callingActivity2 = "" + callingActivity;
         System.out.println("NICK HERES THE CALLING ACTIVITY:");
@@ -107,8 +111,7 @@ public class HomeFeed extends AppCompatActivity {
 
         uvButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0) {
-                getInputData();
-
+               getInputData();
             }
         });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -142,24 +145,31 @@ public class HomeFeed extends AppCompatActivity {
     //Find all bluetooth pairs and get their address and name
     private void connectBluetoothDevice() throws IOException {
         try{
-            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            bluetoothAddress = bluetoothAdapter.getAddress();
-            pairedBluetoothDevices = bluetoothAdapter.getBondedDevices();
-            if(pairedBluetoothDevices.size() > 0){
-                for(BluetoothDevice bluetoothDev : pairedBluetoothDevices){
-                    bluetoothAddress = bluetoothDev.getAddress();
-                    bluetoothDeviceName = bluetoothAdapter.getName();
-                    //Toast.makeText(getApplicationContext(),bluetoothDeviceName, Toast.LENGTH_SHORT).show();
-                }
+
+            if(bluetoothAdapter == null) {
+                myBluetooth = BluetoothAdapter.getDefaultAdapter();
+                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(bluetoothAddress);
+                bluetoothSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(uuid);
+                bluetoothSocket.connect();
             }
+//            myBluetooth = BluetoothAdapter.getDefaultAdapter();
+//            bluetoothAddress = myBluetooth.getAddress();
+//            pairedBluetoothDevices = myBluetooth.getBondedDevices();
+//            if(pairedBluetoothDevices.size() > 0){
+//                for(BluetoothDevice bluetoothDev : pairedBluetoothDevices){
+//                    bluetoothAddress = bluetoothDev.getAddress();
+//                    bluetoothDeviceName = myBluetooth.getName();
+                    //Toast.makeText(getApplicationContext(),bluetoothDeviceName, Toast.LENGTH_SHORT).show();
+//                }
+//            }
         }catch(Exception e){ }
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(bluetoothAddress);
-        bluetoothSocket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(uuid);
-        bluetoothSocket.connect();
-        try{
-            //Toast.makeText(getApplicationContext(),bluetoothDeviceName, Toast.LENGTH_SHORT).show();
-        }catch(Exception exception){}
+//        myBluetooth = BluetoothAdapter.getDefaultAdapter();
+//        BluetoothDevice bluetoothDevice = myBluetooth.getRemoteDevice(bluetoothAddress);
+//        bluetoothSocket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(uuid);
+//        bluetoothSocket.connect();
+//        try{
+//            //Toast.makeText(getApplicationContext(),bluetoothDeviceName, Toast.LENGTH_SHORT).show();
+//        }catch(Exception exception){}
     }
 
     private void getInputData(){
