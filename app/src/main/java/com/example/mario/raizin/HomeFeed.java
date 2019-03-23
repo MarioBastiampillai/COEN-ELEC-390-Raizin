@@ -31,7 +31,7 @@ public class HomeFeed extends AppCompatActivity {
 
     Button generalInformationButton;
     Button timeOutsideButton;
-    String valueToBeSent;
+
 
     // nick bluetooth
     BluetoothAdapter bluetoothAdapter = null;
@@ -175,7 +175,7 @@ public class HomeFeed extends AppCompatActivity {
                 in = bluetoothSocket.getInputStream();
                 bytes = in.read(buffer);
                 bluetoothSerial = new String(buffer, 0, bytes);
-                valueToBeSent=bluetoothSerial;
+                UVDisplayObject.setText(bluetoothSerial);
                 }
         }catch(Exception exception){}
         Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
