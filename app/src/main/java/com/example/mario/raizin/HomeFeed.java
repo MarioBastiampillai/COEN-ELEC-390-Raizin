@@ -26,6 +26,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.example.mario.raizin.DeviceList.EXTRA_ADDRESS;
+
 public class HomeFeed extends AppCompatActivity {
 
     Button generalInformationButton;
@@ -75,6 +77,7 @@ public class HomeFeed extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        String bt_address = intent.getStringExtra(EXTRA_ADDRESS);
         callingActivity = intent.getStringExtra("FROM_ACTIVITY");
         String callingActivity2 = "" + callingActivity;
         System.out.println("NICK HERES THE CALLING ACTIVITY:");
@@ -101,7 +104,7 @@ public class HomeFeed extends AppCompatActivity {
 
         uvButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0) {
-                getInputData();
+//                getInputData();
             }
         });
 
@@ -121,9 +124,9 @@ public class HomeFeed extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        try{
-            connectBluetoothDevice();
-        }catch(Exception exception){}
+//        try{
+//            connectBluetoothDevice();
+//        }catch(Exception exception){}
 
     }
     //Find all bluetooth pairs and get their address and name
