@@ -171,7 +171,7 @@ public class HomeFeed extends AppCompatActivity {
         String blueToothSerialArray[]=new String[10];
         int index=0;
         try{
-            while(!(bluetoothSocket == null)) {
+            if(!(bluetoothSocket == null)) {
                 in = bluetoothSocket.getInputStream();
                 bytes = in.read(buffer);
                 bluetoothSerial = new String(buffer, 0, bytes);
