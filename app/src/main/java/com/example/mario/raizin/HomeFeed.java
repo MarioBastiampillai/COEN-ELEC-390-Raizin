@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.CountDownTimer;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class HomeFeed extends AppCompatActivity {
 
     Button generalInformationButton;
     Button timeOutsideButton;
+    String valueToBeSent;
 
     // nick bluetooth
     BluetoothAdapter bluetoothAdapter = null;
@@ -45,6 +47,7 @@ public class HomeFeed extends AppCompatActivity {
     private TextView timeOutsideText;
     private TextView timeOutsideTimerTextView;
     private TextView timeUntilReapplyTextView;
+    TextView UVDisplayObject;
 
     private CountDownTimer countdownTimer;
     private long timeLeftInMilliReapply; //SET this variable with max timer time
@@ -54,6 +57,7 @@ public class HomeFeed extends AppCompatActivity {
     public int totalTimeOutsideMilli;
     public int totalReapplyTimeMilli;
     String callingActivity;
+    FloatingActionButton floatingActionButton;
 
     public void onBackPressed() {
         //super.onBackPressed();
@@ -65,8 +69,10 @@ public class HomeFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_feed);
         generalInformationButton=(Button)findViewById(R.id.generalInfoButtonID);
-        timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
+        //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
         uvButton = (Button)findViewById(R.id.uvButton);
+        UVDisplayObject=(TextView)findViewById(R.id.UVDisplay);
+        floatingActionButton=(FloatingActionButton)findViewById(R.id.floatingActionButtonID);
 
         countDownText = findViewById(R.id.countdown_text);
         timeOutsideText = findViewById(R.id.timeOutsideText);
@@ -102,9 +108,16 @@ public class HomeFeed extends AppCompatActivity {
         uvButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0) {
                 getInputData();
+
             }
         });
-
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TimeOutsideActivity.class);
+                startActivity(intent);
+            }
+        });
         generalInformationButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
@@ -114,13 +127,13 @@ public class HomeFeed extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        timeOutsideButton.setOnClickListener(new View.OnClickListener() {
+        /*timeOutsideButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
                 Intent intent = new Intent(getApplicationContext(), TimeOutsideActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
         try{
             connectBluetoothDevice();
         }catch(Exception exception){}
@@ -155,12 +168,15 @@ public class HomeFeed extends AppCompatActivity {
         int bytes; //number of bytes read
         byte[] buffer = new byte[4]; //read 4 bytes from bluetooth to store 1 float
         String bluetoothSerial = "";
+        String blueToothSerialArray[]=new String[10];
+        int index=0;
         try{
-            if(!(bluetoothSocket == null)) {
+            while(!(bluetoothSocket == null)) {
                 in = bluetoothSocket.getInputStream();
                 bytes = in.read(buffer);
                 bluetoothSerial = new String(buffer, 0, bytes);
-            }
+                valueToBeSent=bluetoothSerial;
+                }
         }catch(Exception exception){}
         Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
     }

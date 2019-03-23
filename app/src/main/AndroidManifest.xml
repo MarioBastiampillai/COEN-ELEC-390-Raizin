@@ -32,7 +32,7 @@
             android:name=".TimeOutsideActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".Timer" />
-        <activity android:name=".CustomTimer"></activity>
+        <activity android:name=".CustomTimer" />
     </application>
 
 </manifest>
