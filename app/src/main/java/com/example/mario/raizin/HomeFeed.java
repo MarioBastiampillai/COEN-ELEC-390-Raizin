@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class HomeFeed extends AppCompatActivity {
 
     Button generalInformationButton;
     Button timeOutsideButton;
+
 
     // nick bluetooth
     BluetoothAdapter bluetoothAdapter = null;
@@ -73,6 +75,8 @@ public class HomeFeed extends AppCompatActivity {
         timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
         uvButton = (Button)findViewById(R.id.uvButton);
 
+
+
         countDownText = findViewById(R.id.countdown_text);
         timeOutsideText = findViewById(R.id.timeOutsideText);
         timeUntilReapplyTextView = findViewById(R.id.timeUntilReapplyTextView);
@@ -107,7 +111,8 @@ public class HomeFeed extends AppCompatActivity {
 
         uvButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0) {
-               getInputData();
+
+                getInputData();
             }
         });
 
@@ -130,6 +135,11 @@ public class HomeFeed extends AppCompatActivity {
        try{
             connectBluetoothDevice();
         }catch(Exception exception){}
+
+        viewHandler.post(updateView);
+
+
+
 
     }
     //Find all bluetooth pairs and get their address and name
@@ -280,4 +290,16 @@ public class HomeFeed extends AppCompatActivity {
             timeOutsideTimerTextView.setText("Remaining time in outdoor session:");
         }
     }
+
+    Handler viewHandler = new Handler();
+        Runnable updateView = new Runnable() {
+            @Override
+            public void run() {
+
+                //mEmulatorView.invalidate();
+                viewHandler.postDelayed(updateView, 1950);
+                getInputData();
+
+            }
+        };
 }
