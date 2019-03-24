@@ -11,11 +11,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.CountDownTimer;
+import android.support.design.widget.FloatingActionButton;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,7 +35,7 @@ import static com.example.mario.raizin.DeviceList.EXTRA_ADDRESS;
 
 public class HomeFeed extends AppCompatActivity {
 
-    Button generalInformationButton;
+    //Button generalInformationButton;
     Button timeOutsideButton;
 
 
@@ -52,6 +56,7 @@ public class HomeFeed extends AppCompatActivity {
     private TextView timeOutsideText;
     private TextView timeOutsideTimerTextView;
     private TextView timeUntilReapplyTextView;
+    TextView UVDisplayObject;
 
     private CountDownTimer countdownTimer;
     private long timeLeftInMilliReapply; //SET this variable with max timer time
@@ -61,6 +66,7 @@ public class HomeFeed extends AppCompatActivity {
     public int totalTimeOutsideMilli;
     public int totalReapplyTimeMilli;
     String callingActivity;
+    FloatingActionButton floatingActionButton;
 
     public void onBackPressed() {
         //super.onBackPressed();
@@ -68,12 +74,34 @@ public class HomeFeed extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.example_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.item2:
+                Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_feed);
-        generalInformationButton=(Button)findViewById(R.id.generalInfoButtonID);
-        timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
+
+        //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
         uvButton = (Button)findViewById(R.id.uvButton);
+        UVDisplayObject=(TextView)findViewById(R.id.UVDisplay);
+        floatingActionButton=(FloatingActionButton)findViewById(R.id.floatingActionButtonID);
 
 
 
@@ -115,8 +143,14 @@ public class HomeFeed extends AppCompatActivity {
                 getInputData();
             }
         });
-
-        generalInformationButton.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TimeOutsideActivity.class);
+                startActivity(intent);
+            }
+        });
+        /*generalInformationButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
                 Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
@@ -124,15 +158,15 @@ public class HomeFeed extends AppCompatActivity {
 
                 startActivity(intent);
             }
-        });
-        timeOutsideButton.setOnClickListener(new View.OnClickListener() {
+        });*/
+        /*timeOutsideButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
                 Intent intent = new Intent(getApplicationContext(), TimeOutsideActivity.class);
                 startActivity(intent);
             }
-        });
-       try{
+        });*/
+        try{
             connectBluetoothDevice();
         }catch(Exception exception){}
 
