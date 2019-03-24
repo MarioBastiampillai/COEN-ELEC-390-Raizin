@@ -185,6 +185,9 @@ public class HomeFeed extends AppCompatActivity {
 
                 bluetoothSerial = new String(buffer,0,4);
             }
+            else{
+                bluetoothSerial = null;
+            }
         }catch(Exception exception){}
         Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
     }
@@ -292,12 +295,13 @@ public class HomeFeed extends AppCompatActivity {
     }
 
     Handler viewHandler = new Handler();
+    //public EmulatorView mEmulatorView;
         Runnable updateView = new Runnable() {
             @Override
             public void run() {
 
                 //mEmulatorView.invalidate();
-                viewHandler.postDelayed(updateView, 1950);
+                viewHandler.postDelayed(updateView, 2000);
                 getInputData();
 
             }
