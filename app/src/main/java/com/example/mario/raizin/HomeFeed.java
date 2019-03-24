@@ -10,7 +10,10 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
@@ -24,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v4.app.NotificationManagerCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,11 +39,10 @@ import static com.example.mario.raizin.DeviceList.EXTRA_ADDRESS;
 
 public class HomeFeed extends AppCompatActivity {
 
-    //Button generalInformationButton;
-    Button timeOutsideButton;
+    PowerManager.WakeLock wakeLock;
 
 
-    // nick bluetooth
+    //bluetooth
     BluetoothAdapter bluetoothAdapter = null;
     BluetoothAdapter myBluetooth= null;
     BluetoothSocket bluetoothSocket = null;
@@ -97,6 +100,7 @@ public class HomeFeed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_feed);
+        createNotificationChannel();
 
         //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
         uvButton = (Button)findViewById(R.id.uvButton);
@@ -150,25 +154,14 @@ public class HomeFeed extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        /*generalInformationButton.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View arg0) {
-                Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
-                //Intent inSkinType=new Intent(getApplicationContext(), GeneralInformationActivity.class);
-
-                startActivity(intent);
-            }
-        });*/
-        /*timeOutsideButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                Intent intent = new Intent(getApplicationContext(), TimeOutsideActivity.class);
-                startActivity(intent);
-            }
-        });*/
         try{
             connectBluetoothDevice();
         }catch(Exception exception){}
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "tag:");
+        wakeLock.acquire();
 
         viewHandler.post(updateView);
 
@@ -186,24 +179,8 @@ public class HomeFeed extends AppCompatActivity {
                 bluetoothSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(uuid);
                 bluetoothSocket.connect();
             }
-//            myBluetooth = BluetoothAdapter.getDefaultAdapter();
-//            bluetoothAddress = myBluetooth.getAddress();
-//            pairedBluetoothDevices = myBluetooth.getBondedDevices();
-//            if(pairedBluetoothDevices.size() > 0){
-//                for(BluetoothDevice bluetoothDev : pairedBluetoothDevices){
-//                    bluetoothAddress = bluetoothDev.getAddress();
-//                    bluetoothDeviceName = myBluetooth.getName();
-                    //Toast.makeText(getApplicationContext(),bluetoothDeviceName, Toast.LENGTH_SHORT).show();
-//                }
-//            }
         }catch(Exception e){ }
-//        myBluetooth = BluetoothAdapter.getDefaultAdapter();
-//        BluetoothDevice bluetoothDevice = myBluetooth.getRemoteDevice(bluetoothAddress);
-//        bluetoothSocket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(uuid);
-//        bluetoothSocket.connect();
-//        try{
-//            //Toast.makeText(getApplicationContext(),bluetoothDeviceName, Toast.LENGTH_SHORT).show();
-//        }catch(Exception exception){}
+
     }
 
     private void getInputData(){
@@ -229,16 +206,15 @@ public class HomeFeed extends AppCompatActivity {
 
 
     void pushNotification(String title, String content) {
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
+        NotificationManager NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "1")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(content)
+
                 .setAutoCancel(true);
-        mNotificationManager.notify(0, mBuilder.build());
+        NotificationManager.notify(1, mBuilder.build());
     }
-
-
 
     public void startTimer(String timer){
         if(timer == "reapply"){
@@ -290,10 +266,19 @@ public class HomeFeed extends AppCompatActivity {
             timeleftText += seconds;
 
             countDownText.setText(timeleftText);
+            if(countDownText.getText().equals("0:01")){
+
+            }
             if(countDownText.getText().equals("0:00")){
-                pushNotification("reapply bitch", "lol");
-                if(timeLeftInMilliTimeOutside > totalReapplyTimeMilli)
-                    TimerSetup("reapply", totalReapplyTimeMilli);
+                if(timeLeftInMilliTimeOutside > totalReapplyTimeMilli) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            pushNotification("Reapply", "It is time to reapply sunscreen");
+                            TimerSetup("reapply", totalReapplyTimeMilli);
+                        }
+                    }, 1000);
+                }
             }
         }
         else{
@@ -308,12 +293,13 @@ public class HomeFeed extends AppCompatActivity {
             timeleftText += seconds;
 
             timeOutsideText.setText(timeleftText);
-            if(timeOutsideText.getText().equals("0:00")){
+            if(timeOutsideText.getText().equals("0:01")){
                 pushNotification("Finished!", "Your outdoor sesssion is complete.");
             }
         }
 
-    };
+    }
+
 
     public void TimerSetup(String timer, int time){
         if(timer == "reapply"){
@@ -326,6 +312,27 @@ public class HomeFeed extends AppCompatActivity {
             startTimer(timer);
             timeOutsideTimerTextView.setText("Remaining time in outdoor session:");
         }
+    }
+
+    //Android documentation https://developer.android.com/training/notify-user/build-notification
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "channel_name";
+            String description = "description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        wakeLock.release();
     }
 
     Handler viewHandler = new Handler();
