@@ -43,6 +43,8 @@ public class HomeFeed extends AppCompatActivity {
     Button uvButton;
     static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     int measuredUVIndex = -1;
+    String bluetoothSerial=null;
+    InputStream in;
 
     private TextView countDownText;
     private TextView timeOutsideText;
@@ -162,19 +164,22 @@ public class HomeFeed extends AppCompatActivity {
 
     private void getInputData(){
 
-        InputStream in;
+        //InputStream in;
         int bytes; //number of bytes read
         byte[] buffer = new byte[4]; //read 4 bytes from bluetooth to store 1 float
-        String bluetoothSerial = "";
+        //String bluetoothSerial=null;
         try{
             if(!(bluetoothSocket == null)) {
                 in = bluetoothSocket.getInputStream();
-                bytes = in.read(buffer);
-                bluetoothSerial = new String(buffer, 0, bytes);
+                in.read(buffer,0,4);
+
+                bluetoothSerial = new String(buffer,0,4);
             }
         }catch(Exception exception){}
         Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
     }
+
+
 
     void pushNotification(String title, String content) {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
