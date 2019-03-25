@@ -10,8 +10,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Handler;
+import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v4.app.NotificationManagerCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +36,7 @@ import java.util.UUID;
 
 public class HomeFeed extends AppCompatActivity {
 
-    //Button generalInformationButton;
-    Button timeOutsideButton;
+    PowerManager.WakeLock wakeLock;
 
     Handler viewHandler = new Handler();
     //private static final String TAG = "MyActivity";
@@ -100,6 +104,7 @@ public class HomeFeed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_feed);
+        createNotificationChannel();
 
         //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
         uvButton = (Button) findViewById(R.id.uvButton);
@@ -163,6 +168,10 @@ public class HomeFeed extends AppCompatActivity {
         try{
             connectBluetoothDevice();
         }catch(Exception exception){}
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "tag:");
+        wakeLock.acquire();
 
         viewHandler.post(updateView);
 
@@ -265,13 +274,14 @@ public class HomeFeed extends AppCompatActivity {
     }
 
     void pushNotification(String title, String content) {
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
+        NotificationManager NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "1")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(content)
+
                 .setAutoCancel(true);
-        mNotificationManager.notify(0, mBuilder.build());
+        NotificationManager.notify(1, mBuilder.build());
     }
 
     public void startTimer(String timer) {
@@ -319,13 +329,23 @@ public class HomeFeed extends AppCompatActivity {
             timeleftText += seconds;
 
             countDownText.setText(timeleftText);
-            if (countDownText.getText().equals("0:00")) {
-                pushNotification("reapply bitch", "lol");
-                if (timeLeftInMilliTimeOutside > totalReapplyTimeMilli)
-                    TimerSetup("reapply", totalReapplyTimeMilli);
+            if(countDownText.getText().equals("0:01")){
+
             }
-        } else {
-            int minutes = (int) timeLeftInMilliTimeOutside / 60000;
+            if((countDownText.getText().equals("0:00")) || (countDownText.getText().equals("00:00")) || (countDownText.getText().equals("000:00"))){
+                if(timeLeftInMilliTimeOutside > totalReapplyTimeMilli) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            pushNotification("Reapply", "It is time to reapply sunscreen");
+                            TimerSetup("reapply", totalReapplyTimeMilli);
+                        }
+                    }, 1000);
+                }
+            }
+        }
+        else{
+            int minutes = (int) timeLeftInMilliTimeOutside/60000;
             int seconds = (int) timeLeftInMilliTimeOutside % 60000 / 1000;
 
             String timeleftText;
@@ -336,17 +356,16 @@ public class HomeFeed extends AppCompatActivity {
             timeleftText += seconds;
 
             timeOutsideText.setText(timeleftText);
-            if (timeOutsideText.getText().equals("0:00")) {
+            if(timeOutsideText.getText().equals("0:01")){
                 pushNotification("Finished!", "Your outdoor sesssion is complete.");
             }
         }
 
     }
 
-    ;
 
-    public void TimerSetup(String timer, int time) {
-        if (timer == "reapply") {
+    public void TimerSetup(String timer, int time){
+        if(timer == "reapply"){
             timeLeftInMilliReapply = time;
             startTimer(timer);
             timeUntilReapplyTextView.setText("Time until next Reapply:");
@@ -357,6 +376,32 @@ public class HomeFeed extends AppCompatActivity {
         }
     }
 
+    //Android documentation https://developer.android.com/training/notify-user/build-notification
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "channel_name";
+            String description = "description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        wakeLock.release();
+    }
+
+    Handler viewHandler = new Handler();
+    //public EmulatorView mEmulatorView;
+        Runnable updateView = new Runnable() {
+            @Override
+            public void run() {
     private void Disconnect() {
         if (btSocket != null) //If the btSocket is busy
         {
