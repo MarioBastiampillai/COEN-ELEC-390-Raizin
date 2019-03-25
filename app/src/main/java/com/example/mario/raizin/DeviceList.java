@@ -2,7 +2,9 @@ package com.example.mario.raizin;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +22,7 @@ public class DeviceList extends AppCompatActivity {
 
     Button btnPaired;
     ListView devicelist;
+    SharedPreferences myPrefs;
 
     private BluetoothAdapter myBluetooth = null;
     private Set<BluetoothDevice> pairedDevices;
@@ -29,6 +32,8 @@ public class DeviceList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
+
+        myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
 
         btnPaired = (Button) findViewById(R.id.button);
         devicelist = (ListView) findViewById(R.id.listView);
@@ -73,8 +78,11 @@ public class DeviceList extends AppCompatActivity {
             String info = ((TextView) view).getText().toString();
             String address = info.substring(info.length()-17);// gets bluetooth address
 
-            Intent i = new Intent(DeviceList.this, HomeFeed.class);
+            Intent i = new Intent(getApplicationContext(), HomeFeed.class);
             i.putExtra(EXTRA_ADDRESS, address);
+
+
+            //myPrefs.edit().putString("device_add", address).apply();
             startActivity(i);
         }
     };
