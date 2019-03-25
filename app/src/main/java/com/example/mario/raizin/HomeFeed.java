@@ -269,7 +269,7 @@ public class HomeFeed extends AppCompatActivity {
             if(countDownText.getText().equals("0:01")){
 
             }
-            if(countDownText.getText().equals("0:00")){
+            if((countDownText.getText().equals("0:00")) || (countDownText.getText().equals("00:00")) || (countDownText.getText().equals("000:00"))){
                 if(timeLeftInMilliTimeOutside > totalReapplyTimeMilli) {
                     new Handler().postDelayed(new Runnable() {
                         @Override
