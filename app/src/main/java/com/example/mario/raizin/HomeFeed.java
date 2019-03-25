@@ -15,6 +15,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,6 +52,8 @@ public class HomeFeed extends AppCompatActivity {
     Button uvButton;
     static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     int measuredUVIndex = -1;
+    String bluetoothSerial=null;
+    InputStream in;
 
     private TextView countDownText;
     private TextView timeOutsideText;
@@ -104,6 +107,8 @@ public class HomeFeed extends AppCompatActivity {
         UVDisplayObject=(TextView)findViewById(R.id.UVDisplay);
         floatingActionButton=(FloatingActionButton)findViewById(R.id.floatingActionButtonID);
 
+
+
         countDownText = findViewById(R.id.countdown_text);
         timeOutsideText = findViewById(R.id.timeOutsideText);
         timeUntilReapplyTextView = findViewById(R.id.timeUntilReapplyTextView);
@@ -138,7 +143,8 @@ public class HomeFeed extends AppCompatActivity {
 
         uvButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0) {
-               getInputData();
+
+                getInputData();
             }
         });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +163,11 @@ public class HomeFeed extends AppCompatActivity {
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "tag:");
         wakeLock.acquire();
 
+        viewHandler.post(updateView);
+
+
+
+
     }
     //Find all bluetooth pairs and get their address and name
     private void connectBluetoothDevice() throws IOException {
@@ -174,22 +185,25 @@ public class HomeFeed extends AppCompatActivity {
 
     private void getInputData(){
 
-        InputStream in;
+        //InputStream in;
         int bytes; //number of bytes read
         byte[] buffer = new byte[4]; //read 4 bytes from bluetooth to store 1 float
-        String bluetoothSerial = "";
-        String blueToothSerialArray[]=new String[10];
-        int index=0;
+        //String bluetoothSerial=null;
         try{
             if(!(bluetoothSocket == null)) {
                 in = bluetoothSocket.getInputStream();
-                bytes = in.read(buffer);
-                bluetoothSerial = new String(buffer, 0, bytes);
-                UVDisplayObject.setText(bluetoothSerial);
-                }
+                in.read(buffer,0,4);
+
+                bluetoothSerial = new String(buffer,0,4);
+            }
+            else{
+                bluetoothSerial = null;
+            }
         }catch(Exception exception){}
         Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
     }
+
+
 
     void pushNotification(String title, String content) {
         NotificationManager NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -320,4 +334,17 @@ public class HomeFeed extends AppCompatActivity {
         super.onDestroy();
         wakeLock.release();
     }
+
+    Handler viewHandler = new Handler();
+    //public EmulatorView mEmulatorView;
+        Runnable updateView = new Runnable() {
+            @Override
+            public void run() {
+
+                //mEmulatorView.invalidate();
+                viewHandler.postDelayed(updateView, 2000);
+                getInputData();
+
+            }
+        };
 }
