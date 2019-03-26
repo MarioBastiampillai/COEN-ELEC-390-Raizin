@@ -1,5 +1,6 @@
 package com.example.mario.raizin;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -397,11 +398,11 @@ public class HomeFeed extends AppCompatActivity {
         wakeLock.release();
     }
 
-    Handler viewHandler = new Handler();
-    //public EmulatorView mEmulatorView;
-        Runnable updateView = new Runnable() {
-            @Override
-            public void run() {
+//    Handler viewHandler = new Handler();
+//    //public EmulatorView mEmulatorView;
+//        Runnable updateView = new Runnable() {
+//            @Override
+//            public void run() {
     private void Disconnect() {
         if (btSocket != null) //If the btSocket is busy
         {
