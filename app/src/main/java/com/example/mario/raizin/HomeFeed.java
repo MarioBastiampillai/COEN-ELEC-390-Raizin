@@ -1,5 +1,6 @@
 package com.example.mario.raizin;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -71,6 +72,7 @@ public class HomeFeed extends AppCompatActivity {
     public int totalTimeOutsideMilli;
     public int totalReapplyTimeMilli;
     String callingActivity;
+    //String fitzpatrickType = null;
     int currentScoreTrack;
     FloatingActionButton floatingActionButton;
 
@@ -87,6 +89,8 @@ public class HomeFeed extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.item2:
                 Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
+                currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
+                intent.putExtra("SCORE_TRACK", currentScoreTrack);
                 startActivity(intent);
                 return true;
             default:
@@ -127,6 +131,27 @@ public class HomeFeed extends AppCompatActivity {
         //address = myPrefs.getString("device_add", null);
 
         callingActivity = intent.getStringExtra("FROM_ACTIVITY");
+        //currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
+
+        /*if (currentScoreTrack >= 0 && currentScoreTrack < 8){
+            fitzpatrickType = "Type 1";
+        }
+        if (currentScoreTrack >= 8 && currentScoreTrack < 17){
+            fitzpatrickType = "Type 2";
+        }
+        if (currentScoreTrack >= 17 && currentScoreTrack < 25){
+            fitzpatrickType = "Type 3";
+        }
+        if (currentScoreTrack >= 25 && currentScoreTrack < 30){
+            fitzpatrickType = "Type 4";
+        }
+        if (currentScoreTrack >= 30){
+            fitzpatrickType = "Type V and VI";
+        }
+        setContentView(R.layout.activity_home_feed);
+        TextView textView = (TextView) findViewById(R.id.textViewName);
+        textView.setText("Per the fitzpatrick scale you are of the " + fitzpatrickType);
+*/
 
         String callingActivity2 = "" + callingActivity;
         System.out.println("NICK HERES THE CALLING ACTIVITY:");
@@ -399,11 +424,11 @@ public class HomeFeed extends AppCompatActivity {
         wakeLock.release();
     }
 
-    Handler viewHandler = new Handler();
+    //Handler viewHandler = new Handler();
     //public EmulatorView mEmulatorView;
-        Runnable updateView = new Runnable() {
-            @Override
-            public void run() {
+        //Runnable updateView = new Runnable() {
+            //@Override
+            //public void run() {
     private void Disconnect() {
         if (btSocket != null) //If the btSocket is busy
         {
