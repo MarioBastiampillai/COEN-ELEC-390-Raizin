@@ -54,6 +54,7 @@ public class HomeFeed extends AppCompatActivity {
     public int totalTimeOutsideMilli;
     public int totalReapplyTimeMilli;
     String callingActivity;
+    int currentScoreTrack;
 
     public void onBackPressed() {
         //super.onBackPressed();
@@ -76,6 +77,7 @@ public class HomeFeed extends AppCompatActivity {
         Intent intent = getIntent();
 
         callingActivity = intent.getStringExtra("FROM_ACTIVITY");
+
         String callingActivity2 = "" + callingActivity;
         System.out.println("NICK HERES THE CALLING ACTIVITY:");
         System.out.println(callingActivity);

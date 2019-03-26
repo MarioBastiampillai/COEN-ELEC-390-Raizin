@@ -28,9 +28,10 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 } catch (Exception ignored) {
                     ignored.printStackTrace();
+                    // #9B0FB6 IS THE HEX OF THE LOGO. FOR FUTURE REFERENCES
                 }
             }
-        }, 3000);  // Give a 3 seconds delay.
+        }, 1500);  // Give a 3 seconds delay.
     }
 
     @Override
