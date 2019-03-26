@@ -19,9 +19,8 @@ public class MainActivity extends AppCompatActivity {
                 //The following code will execute after the 5 seconds.
 
                 try {
-
                     //Go to next page i.e, start the next activity.
-                    Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
+                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
                     startActivity(intent);
 
                     //Let's Finish Splash Activity since we don't want to show this when user press back button.
