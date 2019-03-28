@@ -52,7 +52,8 @@ public class DeviceList extends AppCompatActivity {
         btnPaired.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pairedDevicesList();
+                Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
+                startActivity(intent);    //was pairedDevicesList();
             }
         });
     }
