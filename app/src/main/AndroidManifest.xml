@@ -7,35 +7,39 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
-    <application
+    <application android:hardwareAccelerated="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DeviceList">
+        <activity android:name=".DeviceList"/>
+        <activity android:name=".userPersonalization"></activity>
+        <activity android:name=".indexPage"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:parentActivityName=".DeviceList">
-        </activity>
         <activity
             android:name=".HomeFeed"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".DeviceList" />
         <activity
             android:name=".GeneralInformationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".TimeOutsideActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Timer" />
-        <activity android:name=".CustomTimer" />
+        <activity android:name=".Timer"
+            android:parentActivityName=".TimeOutsideActivity"/>
+        <activity android:name=".CustomTimer"
+            android:parentActivityName=".Timer"/>
     </application>
 
 </manifest>
