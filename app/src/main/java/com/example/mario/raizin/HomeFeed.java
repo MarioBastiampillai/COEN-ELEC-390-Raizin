@@ -179,7 +179,7 @@ public class HomeFeed extends AppCompatActivity {
 
     }
 
-    //public EmulatorView mEmulatorView;
+    //private EmulatorView mEmulatorView;
     Runnable updateView = new Runnable() {
         @Override
         public void run() {
