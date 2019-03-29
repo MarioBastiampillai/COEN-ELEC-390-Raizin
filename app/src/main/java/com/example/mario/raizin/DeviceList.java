@@ -28,6 +28,8 @@ public class DeviceList extends AppCompatActivity {
     private Set<BluetoothDevice> pairedDevices;
     public static String EXTRA_ADDRESS = "device_address";
 
+    int deviceScoreTrack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +82,8 @@ public class DeviceList extends AppCompatActivity {
 
             Intent i = new Intent(getApplicationContext(), HomeFeed.class);
             i.putExtra(EXTRA_ADDRESS, address);
+            deviceScoreTrack = i.getIntExtra("SCORE_TRACK", 0);
+            i.putExtra("SCORE_TRACK", deviceScoreTrack);
 
 
             //myPrefs.edit().putString("device_add", address).apply();
