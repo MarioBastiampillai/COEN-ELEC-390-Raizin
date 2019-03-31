@@ -27,6 +27,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -141,7 +142,15 @@ public class HomeFeed extends AppCompatActivity{
         welcomeMessage=findViewById(R.id.welcomeName);
         Intent getName=getIntent();
         String nameGiven=getName.getStringExtra("passedNameToDeviceList");
-        welcomeMessage.setText("Welcome, "+nameGiven);
+        Intent getNameFromLogin=getIntent();
+        String nameGivenFromLogin=getNameFromLogin.getStringExtra("goToHomeFeed");
+        if(!TextUtils.isEmpty(nameGivenFromLogin))
+        {
+            welcomeMessage.setText("Welcome, "+nameGivenFromLogin);
+        }
+        else{
+            welcomeMessage.setText("Welcome, "+nameGiven);
+        }
         sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(Name, nameGiven);

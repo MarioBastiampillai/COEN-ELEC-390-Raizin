@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,11 @@ public class LoginorSignUpActivity extends AppCompatActivity {
     Button buttonObject;
     String[] userArray={};
     ListView listViewObject;
+    String userNameSelected;
+    /*SharedPreferences sharedPreferencesObject;
+    public static final String MyPREFERENCESLogin="MyPrefsLogin";
+    public static final String NameLogin="nameLoginKey";*/
+    ArrayList<String>  mStringList= new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,16 +39,16 @@ public class LoginorSignUpActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String name=sharedPreferences.getString("nameKey", null);
 
-        ArrayList<String>  mStringList= new ArrayList<String>();
+        //ArrayList<String>  mStringList= new ArrayList<String>();
         if(!TextUtils.isEmpty(name))
         {
             mStringList.add(name);
         }
         else{
-            mStringList.add("hello yo");
+            Toast.makeText(getApplicationContext(), "Please enter a proper name", Toast.LENGTH_SHORT).show();
         }
          //name is not being added
-        String[] stringArray = new String[1];
+        String[] stringArray = new String[mStringList.size()];   //need to figure out what the size of mStringList is, mStringList.size(), was 1
         stringArray = mStringList.toArray(stringArray);
         listViewObject = (ListView) findViewById(R.id.listViewId);
         ArrayAdapter arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list, stringArray);
@@ -50,8 +56,12 @@ public class LoginorSignUpActivity extends AppCompatActivity {
         listViewObject.setOnItemClickListener(new AdapterView.OnItemClickListener() {   //ass a setOnItemClickListener which will run when one of the items of the listview is clicked
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
+                String[] stringArray = new String[mStringList.size()];
+                stringArray = mStringList.toArray(stringArray);
+                userNameSelected=stringArray[position];
+                Intent intentHomeFeed = new Intent(getApplicationContext(), HomeFeed.class);
+                intentHomeFeed.putExtra("goToHomeFeed", userNameSelected);//take all the information related to userNameSelected and pass it to the HomeFeed and open it directly
+                startActivity(intentHomeFeed);
             }
         });
         /*listViewObject.setOnItemClickListener(new AdapterView.OnItemClickListener() {   //ass a setOnItemClickListener which will run when one of the items of the listview is clicked
