@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.database.sqlite.SQLiteDatabase;
@@ -122,7 +123,9 @@ public class HomeFeed extends AppCompatActivity{
 //        super.onStart();
 //        viewHandler.post(updateView);
 //    }
+    ActionBarDrawerToggle toggle;
     private DrawerLayout drawer;
+   
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
