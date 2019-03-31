@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,8 +32,16 @@ public class LoginorSignUpActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String name=sharedPreferences.getString("nameKey", null);
+
         ArrayList<String>  mStringList= new ArrayList<String>();
-        mStringList.add("hello");  //name is not being added
+        if(!TextUtils.isEmpty(name))
+        {
+            mStringList.add(name);
+        }
+        else{
+            mStringList.add("hello yo");
+        }
+         //name is not being added
         String[] stringArray = new String[1];
         stringArray = mStringList.toArray(stringArray);
         listViewObject = (ListView) findViewById(R.id.listViewId);
@@ -55,7 +64,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
             public void onClick(View arg0)
             {
                 String userNameInput=editTextObject.getText().toString();
-                Intent intent=new Intent(getApplicationContext(), HomeFeed.class);
+                Intent intent=new Intent(getApplicationContext(), indexPage.class);
                 intent.putExtra("userName",userNameInput);
                 startActivity(intent);
             }

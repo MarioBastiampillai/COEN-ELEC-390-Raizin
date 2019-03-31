@@ -140,7 +140,7 @@ public class HomeFeed extends AppCompatActivity{
         drawer=findViewById(R.id.drawer_layout);
         welcomeMessage=findViewById(R.id.welcomeName);
         Intent getName=getIntent();
-        String nameGiven=getName.getStringExtra("userName");
+        String nameGiven=getName.getStringExtra("passedNameToDeviceList");
         welcomeMessage.setText("Welcome, "+nameGiven);
         sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

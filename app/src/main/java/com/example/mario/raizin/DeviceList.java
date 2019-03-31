@@ -52,8 +52,13 @@ public class DeviceList extends AppCompatActivity {
         btnPaired.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
-                startActivity(intent);    //was pairedDevicesList();
+                    //pairedDevicesList();  //was pairedDevicesList();
+                Intent i = new Intent(getApplicationContext(), HomeFeed.class);
+                Intent intent4=getIntent();
+                String passedNameToDeviceListString=intent4.getStringExtra("passedNameToDeviceList");
+                i.putExtra("passedNameToDeviceList", passedNameToDeviceListString);
+                //myPrefs.edit().putString("device_add", address).apply();
+                startActivity(i);
             }
         });
     }
@@ -85,8 +90,9 @@ public class DeviceList extends AppCompatActivity {
             i.putExtra(EXTRA_ADDRESS, address);
             deviceScoreTrack = i.getIntExtra("SCORE_TRACK", 0);
             i.putExtra("SCORE_TRACK", deviceScoreTrack);
-
-
+            Intent intent4=getIntent();
+            String passedNameToDeviceListString=intent4.getStringExtra("passedNameToDeviceList");
+            i.putExtra("passedNameToDeviceList", passedNameToDeviceListString);
             //myPrefs.edit().putString("device_add", address).apply();
             startActivity(i);
         }
