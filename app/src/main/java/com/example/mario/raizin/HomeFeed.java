@@ -70,6 +70,7 @@ public class HomeFeed extends AppCompatActivity{
     private TextView timeOutsideTimerTextView;
     private TextView timeUntilReapplyTextView;
     public TextView UVDisplayObject;
+    public TextView welcomeMessage;
 
     private CountDownTimer countdownTimer;
     private long timeLeftInMilliReapply; //SET this variable with max timer time
@@ -125,7 +126,10 @@ public class HomeFeed extends AppCompatActivity{
 //    }
     ActionBarDrawerToggle toggle;
     private DrawerLayout drawer;
-   
+    SharedPreferences sharedPreferences;                //creation of a SharedPreference object to be used to input data
+
+    public static final String MyPREFERENCES="MyPrefs";
+    public static final String Name="nameKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +138,14 @@ public class HomeFeed extends AppCompatActivity{
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer=findViewById(R.id.drawer_layout);
+        welcomeMessage=findViewById(R.id.welcomeName);
+        Intent getName=getIntent();
+        String nameGiven=getName.getStringExtra("userName");
+        welcomeMessage.setText("Welcome, "+nameGiven);
+        sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Name, nameGiven);
+        editor.commit();
         NavigationView navigationView=findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
