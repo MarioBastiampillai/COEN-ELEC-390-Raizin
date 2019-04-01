@@ -38,21 +38,27 @@ public class LoginorSignUpActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String name=sharedPreferences.getString("nameKey", null);
+        String otherName=sharedPreferences.getString("selectedNameKey", null);
 
         //ArrayList<String>  mStringList= new ArrayList<String>();
-        if(!TextUtils.isEmpty(name))
+        if(!TextUtils.isEmpty(name)&&TextUtils.isEmpty(otherName))
         {
             mStringList.add(name);
+        }
+        else if(TextUtils.isEmpty(name)&&!TextUtils.isEmpty(otherName))
+        {
+            mStringList.add(otherName);
         }
         else{
             Toast.makeText(getApplicationContext(), "Please enter a proper name", Toast.LENGTH_SHORT).show();
         }
          //name is not being added
         String[] stringArray = new String[mStringList.size()];   //need to figure out what the size of mStringList is, mStringList.size(), was 1
-        stringArray = mStringList.toArray(stringArray);
+        stringArray = mStringList.toArray(stringArray);          //need to attach previous stuff in array as well
         listViewObject = (ListView) findViewById(R.id.listViewId);
         ArrayAdapter arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list, stringArray);
         listViewObject.setAdapter(arrayAdapter);
+
         listViewObject.setOnItemClickListener(new AdapterView.OnItemClickListener() {   //ass a setOnItemClickListener which will run when one of the items of the listview is clicked
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -131,6 +131,7 @@ public class HomeFeed extends AppCompatActivity{
 
     public static final String MyPREFERENCES="MyPrefs";
     public static final String Name="nameKey";
+    public static final String selectedName="selectedNameKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,27 +154,36 @@ public class HomeFeed extends AppCompatActivity{
         }
         sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(selectedName, nameGivenFromLogin);
         editor.putString(Name, nameGiven);
         editor.commit();
+
         NavigationView navigationView=findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         // set item as selected to persist highlight
+                        int id = menuItem.getItemId();
+                        switch (id) {
+                            case R.id.nav_information:    //was navigation_item_1
+                                //Do some thing here
+                                // add navigation drawer item onclick method here
+                                Intent intentGeneralInformation = new Intent(getApplicationContext(), GeneralInformationActivity.class);
+                                startActivity(intentGeneralInformation);
+                                break;
+                        }
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         drawer.closeDrawers();
-
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
-
                         return true;
                     }
                 });
-        ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        //ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //drawer.addDrawerListener(toggle);
+        //toggle.syncState();
         createNotificationChannel();
 
         //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
