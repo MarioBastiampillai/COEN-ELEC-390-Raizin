@@ -152,6 +152,8 @@ public class HomeFeed extends AppCompatActivity{
         else{
             welcomeMessage.setText("Welcome, "+nameGiven);
         }
+        Intent skinTypeIntent=getIntent();
+        String skinTypeGet=skinTypeIntent.getStringExtra("SCORE_TRACK");
         sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(selectedName, nameGivenFromLogin);
