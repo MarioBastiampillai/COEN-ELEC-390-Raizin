@@ -21,7 +21,7 @@ public class indexPage extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
+                Intent intent = new Intent(getApplicationContext(), userPersonalization.class);
                 startActivity(intent);
 
             }
