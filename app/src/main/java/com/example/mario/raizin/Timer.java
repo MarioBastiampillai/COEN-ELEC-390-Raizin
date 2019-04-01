@@ -17,7 +17,6 @@ public class Timer extends AppCompatActivity {
     public static final String EXTRA_REAPPLY_TIME = "com.example.mario.raisin.EXTRA_REAPPLY_TIME";
     public static final String EXTRA_START_TIMER = "com.example.mario.raisin.EXTRA_START_TIMER";
 
-    TextView testIntent;
     TextView recommendedTimeTextView;
 
     @Override
@@ -29,11 +28,11 @@ public class Timer extends AppCompatActivity {
         timeOutsideInt = intent.getIntExtra(TimeOutsideActivity.EXTRA_TIME_OUTSIDE, 0);
         System.out.println("NICK HERE IS TIME OUTSIDE PRINTED");
         System.out.println(timeOutsideInt);
-        testIntent = findViewById(R.id.testIntent);
+
         recommendedTimeTextView = findViewById(R.id.recommendedTimeTextView);
 
         timeOutsideString = Integer.toString(timeOutsideInt);
-        testIntent.setText(timeOutsideString);
+
         recommendedTimeTextView.setText(Integer.toString(recommendedTime));
 
     }
