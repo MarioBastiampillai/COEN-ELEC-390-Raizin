@@ -1,3 +1,98 @@
 <resources>
     <string name="app_name">Raizin</string>
+
+    <!--GENETIC DISPOSITION ANSWERS-->
+    <string-array name="GDone">
+        <item>...</item>
+        <item>Light blue, Gray, Green</item>
+        <item>Blue, Gray or Green</item>
+        <item>Blue</item>
+        <item>Dark Brown</item>
+        <item>Brownish Black</item>
+    </string-array>
+
+    <string-array name="GDtwo">
+        <item>...</item>
+        <item>Sandy Red</item>
+        <item>Blond</item>
+        <item>Chestnut/Dark Blond</item>
+        <item>Dark Brown</item>
+        <item>Black</item>
+    </string-array>
+
+    <string-array name="GDthree">
+        <item>...</item>
+        <item>Reddish</item>
+        <item>Very Pale</item>
+        <item>Pale with Beige tint</item>
+        <item>Light Brown</item>
+        <item>Dark Brown</item>
+    </string-array>
+
+    <string-array name="GDfour">
+        <item>...</item>
+        <item>Many</item>
+        <item>Several</item>
+        <item>Few</item>
+        <item>Incidental</item>
+        <item>none</item>
+    </string-array>
+
+    <!--REACTION TO SUN ANSWERS-->
+    <string-array name="REone">
+        <item>...</item>
+        <item>Painful redness, blistering, peeling</item>
+        <item>Blistering followed by peeling</item>
+        <item>Burns sometimes followed by peeling</item>
+        <item>Rare burns</item>
+        <item>Never had burns</item>
+    </string-array>
+
+    <string-array name="REtwo">
+        <item>...</item>
+        <item>Hardly or not at all</item>
+        <item>Light color tan</item>
+        <item>Reasonable tan</item>
+        <item>Tan very easy</item>
+        <item>Turn dark brown quickly</item>
+    </string-array>
+
+    <string-array name="RE3">
+        <item>...</item>
+        <item>Never</item>
+        <item>Seldom</item>
+        <item>Sometimes</item>
+        <item>Often</item>
+        <item>Always</item>
+    </string-array>
+
+    <string-array name="RE4">
+        <item>...</item>
+        <item>Very sensitive</item>
+        <item>Sensitive</item>
+        <item>Normal</item>
+        <item>Very resistant</item>
+        <item>Never had a problem</item>
+    </string-array>
+
+    <!--TANNING HABITS-->
+    <string-array name="THone">
+        <item>...</item>
+        <item>More than 3 months ago</item>
+        <item>2-3 months ago</item>
+        <item>1-2 months ago</item>
+        <item>Less than a month ago</item>
+        <item>Less than 2 weeks ago</item>
+    </string-array>
+
+    <string-array name="THtwo">
+        <item>...</item>
+        <item>Never</item>
+        <item>Hardly ever</item>
+        <item>Sometimes</item>
+        <item>Often</item>
+        <item>Always</item>
+    </string-array>
+
+
 </resources>

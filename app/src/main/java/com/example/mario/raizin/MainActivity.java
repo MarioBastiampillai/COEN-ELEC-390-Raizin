@@ -19,18 +19,18 @@ public class MainActivity extends AppCompatActivity {
                 //The following code will execute after the 5 seconds.
 
                 try {
-
                     //Go to next page i.e, start the next activity.
-                    Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
+                    Intent intent = new Intent(getApplicationContext(), indexPage.class);
                     startActivity(intent);
 
                     //Let's Finish Splash Activity since we don't want to show this when user press back button.
                     finish();
                 } catch (Exception ignored) {
                     ignored.printStackTrace();
+                    // #9B0FB6 IS THE HEX OF THE LOGO. FOR FUTURE REFERENCES
                 }
             }
-        }, 3000);  // Give a 3 seconds delay.
+        }, 1500);  // Give a 3 seconds delay.
     }
 
     @Override
