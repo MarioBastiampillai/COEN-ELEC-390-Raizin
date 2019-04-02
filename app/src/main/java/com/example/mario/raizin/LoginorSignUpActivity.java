@@ -27,7 +27,6 @@ public class LoginorSignUpActivity extends AppCompatActivity {
     String userNameSelected;
     String storedSkinType;
     SharedPreferences sharedPreferences;                //creation of a SharedPreference object to be used to input data
-    int i=0;
     public static final String MyPREFERENCES="MyPrefs";
     /*SharedPreferences sharedPreferencesObject;
     public static final String MyPREFERENCESLogin="MyPrefsLogin";
@@ -51,8 +50,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
             //need to store the priginal name variable as well
             //stringArray[i]=mStringList.toArray(stringArray);
             //i++;
-            mStringList.add(i,name);
-            i++;
+            mStringList.add(name);
         }
         else if(TextUtils.isEmpty(name)&&!TextUtils.isEmpty(otherName))
         {
