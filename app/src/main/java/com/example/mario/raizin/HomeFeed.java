@@ -159,7 +159,7 @@ public class HomeFeed extends AppCompatActivity{
         }
         if(!TextUtils.isEmpty(skinTypeGivenFromLogin))
         {
-            welcomeMessage.setText("Welcome, "+nameGivenFromLogin);
+            skinTypeDisplayObject.setText(skinTypeGivenFromLogin);
         }
         Intent skinTypeIntent=getIntent();
         String skinTypeGet=skinTypeIntent.getStringExtra("SCORE_TRACK");

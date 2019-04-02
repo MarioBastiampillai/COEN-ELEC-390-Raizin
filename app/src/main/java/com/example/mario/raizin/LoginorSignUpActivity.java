@@ -26,6 +26,9 @@ public class LoginorSignUpActivity extends AppCompatActivity {
     ListView listViewObject;
     String userNameSelected;
     String storedSkinType;
+    SharedPreferences sharedPreferences;                //creation of a SharedPreference object to be used to input data
+    int i=0;
+    public static final String MyPREFERENCES="MyPrefs";
     /*SharedPreferences sharedPreferencesObject;
     public static final String MyPREFERENCESLogin="MyPrefsLogin";
     public static final String NameLogin="nameLoginKey";*/
@@ -45,7 +48,11 @@ public class LoginorSignUpActivity extends AppCompatActivity {
         //ArrayList<String>  mStringList= new ArrayList<String>();
         if(!TextUtils.isEmpty(name)&&TextUtils.isEmpty(otherName))
         {
-            mStringList.add(name);
+            //need to store the priginal name variable as well
+            //stringArray[i]=mStringList.toArray(stringArray);
+            //i++;
+            mStringList.add(i,name);
+            i++;
         }
         else if(TextUtils.isEmpty(name)&&!TextUtils.isEmpty(otherName))
         {
@@ -87,6 +94,13 @@ public class LoginorSignUpActivity extends AppCompatActivity {
                 Intent intent=new Intent(getApplicationContext(), indexPage.class);
                 intent.putExtra("userName",userNameInput);
                 startActivity(intent);
+                //put into sharedPreference in indexPage
+                //put the userNameInput into mStringList, sharedPreference
+                //check to see whether the string obtained from sharedPreference is empty or not
+                //if it is not empty, add it to mStringList
+                //check to see if the listview is empty or not
+                //if it is not empty take the econtents and add it into mStringList
+
             }
         });
     }
