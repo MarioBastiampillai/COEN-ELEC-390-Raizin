@@ -25,6 +25,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
     String[] userArray={};
     ListView listViewObject;
     String userNameSelected;
+    String storedSkinType;
     /*SharedPreferences sharedPreferencesObject;
     public static final String MyPREFERENCESLogin="MyPrefsLogin";
     public static final String NameLogin="nameLoginKey";*/
@@ -39,6 +40,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String name=sharedPreferences.getString("nameKey", null);
         String otherName=sharedPreferences.getString("selectedNameKey", null);
+        storedSkinType=sharedPreferences.getString("SkinType", null);
 
         //ArrayList<String>  mStringList= new ArrayList<String>();
         if(!TextUtils.isEmpty(name)&&TextUtils.isEmpty(otherName))
@@ -67,7 +69,9 @@ public class LoginorSignUpActivity extends AppCompatActivity {
                 userNameSelected=stringArray[position];
                 Intent intentHomeFeed = new Intent(getApplicationContext(), HomeFeed.class);
                 intentHomeFeed.putExtra("goToHomeFeed", userNameSelected);//take all the information related to userNameSelected and pass it to the HomeFeed and open it directly
+                intentHomeFeed.putExtra("skinTypeDisplay", storedSkinType);
                 startActivity(intentHomeFeed);
+
             }
         });
         /*listViewObject.setOnItemClickListener(new AdapterView.OnItemClickListener() {   //ass a setOnItemClickListener which will run when one of the items of the listview is clicked

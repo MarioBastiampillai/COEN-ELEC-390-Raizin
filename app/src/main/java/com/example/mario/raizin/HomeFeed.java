@@ -84,6 +84,7 @@ public class HomeFeed extends AppCompatActivity{
     //String fitzpatrickType = null;
     int currentScoreTrack;
     FloatingActionButton floatingActionButton;
+    public TextView skinTypeDisplayObject;
 
 
     @Override
@@ -132,6 +133,7 @@ public class HomeFeed extends AppCompatActivity{
     public static final String MyPREFERENCES="MyPrefs";
     public static final String Name="nameKey";
     public static final String selectedName="selectedNameKey";
+    public static final String SkinType="skinTypeKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,10 +143,13 @@ public class HomeFeed extends AppCompatActivity{
         setSupportActionBar(toolbar);
         drawer=findViewById(R.id.drawer_layout);
         welcomeMessage=findViewById(R.id.welcomeName);
+        skinTypeDisplayObject=findViewById(R.id.skinTypeDisplay);
         Intent getName=getIntent();
         String nameGiven=getName.getStringExtra("passedNameToDeviceList");
         Intent getNameFromLogin=getIntent();
         String nameGivenFromLogin=getNameFromLogin.getStringExtra("goToHomeFeed");
+        Intent getSkinTypeFromLogin=getIntent();
+        String skinTypeGivenFromLogin=getSkinTypeFromLogin.getStringExtra("skinTypeDisplay");
         if(!TextUtils.isEmpty(nameGivenFromLogin))
         {
             welcomeMessage.setText("Welcome, "+nameGivenFromLogin);
@@ -152,12 +157,33 @@ public class HomeFeed extends AppCompatActivity{
         else{
             welcomeMessage.setText("Welcome, "+nameGiven);
         }
+        if(!TextUtils.isEmpty(skinTypeGivenFromLogin))
+        {
+            welcomeMessage.setText("Welcome, "+nameGivenFromLogin);
+        }
         Intent skinTypeIntent=getIntent();
         String skinTypeGet=skinTypeIntent.getStringExtra("SCORE_TRACK");
+        if (currentScoreTrack >= 0 && currentScoreTrack < 8){
+            skinTypeGet = "Skin Type 1";
+        }
+        if (currentScoreTrack >= 8 && currentScoreTrack < 17){
+            skinTypeGet = "Skin Type 2";
+        }
+        if (currentScoreTrack >= 17 && currentScoreTrack < 25){
+            skinTypeGet = "Skin Type 3";
+        }
+        if (currentScoreTrack >= 25 && currentScoreTrack < 30){
+            skinTypeGet = "Skin Type 4";
+        }
+        if (currentScoreTrack >= 30){
+            skinTypeGet = "Skin Type V and VI";
+        }
+        skinTypeDisplayObject.setText(skinTypeGet);
         sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(selectedName, nameGivenFromLogin);
         editor.putString(Name, nameGiven);
+        editor.putString(SkinType, skinTypeGet);
         editor.commit();
 
         NavigationView navigationView=findViewById(R.id.nav_view);
