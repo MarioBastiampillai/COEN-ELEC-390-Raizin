@@ -129,7 +129,6 @@ public class HomeFeed extends AppCompatActivity{
     ActionBarDrawerToggle toggle;
     private DrawerLayout drawer;
     SharedPreferences sharedPreferences;                //creation of a SharedPreference object to be used to input data
-
     public static final String MyPREFERENCES="MyPrefs";
     public static final String Name="nameKey";
     public static final String selectedName="selectedNameKey";
@@ -179,6 +178,8 @@ public class HomeFeed extends AppCompatActivity{
             skinTypeGet = "Skin Type V and VI";
         }
         skinTypeDisplayObject.setText(skinTypeGet);
+
+
         sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(selectedName, nameGivenFromLogin);

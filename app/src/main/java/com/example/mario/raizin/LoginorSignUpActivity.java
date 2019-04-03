@@ -28,6 +28,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
     String storedSkinType;
     SharedPreferences sharedPreferences;                //creation of a SharedPreference object to be used to input data
     public static final String MyPREFERENCES="MyPrefs";
+    public static final String originalName="originalNameKey";
     /*SharedPreferences sharedPreferencesObject;
     public static final String MyPREFERENCESLogin="MyPrefsLogin";
     public static final String NameLogin="nameLoginKey";*/
@@ -43,14 +44,19 @@ public class LoginorSignUpActivity extends AppCompatActivity {
         String name=sharedPreferences.getString("nameKey", null);
         String otherName=sharedPreferences.getString("selectedNameKey", null);
         storedSkinType=sharedPreferences.getString("SkinType", null);
-
+        String previousName=sharedPreferences.getString("originalNameKey", null);
         //ArrayList<String>  mStringList= new ArrayList<String>();
-        if(!TextUtils.isEmpty(name)&&TextUtils.isEmpty(otherName))
+        if(!TextUtils.isEmpty(name)&&TextUtils.isEmpty(otherName)&&TextUtils.isEmpty(previousName))
         {
             //need to store the priginal name variable as well
             //stringArray[i]=mStringList.toArray(stringArray);
             //i++;
             mStringList.add(name);
+        }
+        else if(!TextUtils.isEmpty(name)&&TextUtils.isEmpty(otherName)&&!TextUtils.isEmpty(previousName))
+        {
+            mStringList.add(0, previousName);
+            mStringList.add(1, name);
         }
         else if(TextUtils.isEmpty(name)&&!TextUtils.isEmpty(otherName))
         {
@@ -89,8 +95,18 @@ public class LoginorSignUpActivity extends AppCompatActivity {
             public void onClick(View arg0)
             {
                 String userNameInput=editTextObject.getText().toString();
+                /*SharedPreferences sharedPreferences=getSharedPreferences(originalPreferences, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(originalName, userNameInput);
+                editor.commit();*/
                 Intent intent=new Intent(getApplicationContext(), indexPage.class);
                 intent.putExtra("userName",userNameInput);
+                String[] stringArray = new String[mStringList.size()];
+                stringArray = mStringList.toArray(stringArray);
+                SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(originalName, stringArray[0]);
+                editor.commit();
                 startActivity(intent);
                 //put into sharedPreference in indexPage
                 //put the userNameInput into mStringList, sharedPreference
