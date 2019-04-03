@@ -68,6 +68,7 @@ public class HomeFeed extends AppCompatActivity {
     private long timeLeftInMilliReapply; //SET this variable with max timer time
     private long timeLeftInMilliTimeOutside; //set this variable with time outside
     private boolean timerRunning;
+    TextView warningTextView;
 
     public int totalTimeOutsideMilli;
     public int totalReapplyTimeMilli;
@@ -75,6 +76,7 @@ public class HomeFeed extends AppCompatActivity {
     //String fitzpatrickType = null;
     int currentScoreTrack;
     FloatingActionButton floatingActionButton;
+    Button stopTimerButton;
 
 
     @Override
@@ -116,12 +118,20 @@ public class HomeFeed extends AppCompatActivity {
         uvButton = (Button) findViewById(R.id.uvButton);
         UVDisplayObject = (TextView) findViewById(R.id.UVDisplay);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButtonID);
-
+        warningTextView = findViewById(R.id.warningTextView);
+        if(measuredUVIndex >= 8)
+            warningTextView.setVisibility(View.VISIBLE);
+        else{
+            warningTextView.setVisibility(View.INVISIBLE);
+        }
 
         countDownText = findViewById(R.id.countdown_text);
-        timeOutsideText = findViewById(R.id.timeOutsideText);
         timeUntilReapplyTextView = findViewById(R.id.timeUntilReapplyTextView);
-        timeOutsideTimerTextView = findViewById(R.id.timeOutsideTimerTextView);
+        stopTimerButton = findViewById(R.id.stopTimerButton);
+        if(!timerRunning){
+            stopTimerButton.setVisibility(View.GONE);
+        }
+
 
         Intent intent = getIntent();
         currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
@@ -157,16 +167,14 @@ public class HomeFeed extends AppCompatActivity {
 */
 
         String callingActivity2 = "" + callingActivity;
-        System.out.println("NICK HERES THE CALLING ACTIVITY:");
-        System.out.println(callingActivity);
         int timerStart;
 
         if (callingActivity2.length() == 11) {
-            totalTimeOutsideMilli = intent.getIntExtra(Timer.EXTRA_TIME_OUTSIDE, 0);
+            //totalTimeOutsideMilli = intent.getIntExtra(Timer.EXTRA_TIME_OUTSIDE, 0);
             totalReapplyTimeMilli = intent.getIntExtra(Timer.EXTRA_REAPPLY_TIME, 0);
             timerStart = intent.getIntExtra(Timer.EXTRA_START_TIMER, 0);
         } else {
-            totalTimeOutsideMilli = intent.getIntExtra(CustomTimer.EXTRA_TIME_OUTSIDE, 0);
+            //totalTimeOutsideMilli = intent.getIntExtra(CustomTimer.EXTRA_TIME_OUTSIDE, 0);
             totalReapplyTimeMilli = intent.getIntExtra(CustomTimer.EXTRA_REAPPLY_TIME, 0);
             timerStart = intent.getIntExtra(CustomTimer.EXTRA_START_TIMER, 0);
         }
@@ -174,7 +182,7 @@ public class HomeFeed extends AppCompatActivity {
 
         if (timerStart == 1) {
             TimerSetup("reapply", totalReapplyTimeMilli);
-            TimerSetup("timeOutside", totalTimeOutsideMilli);
+            //TimerSetup("timeOutside", totalTimeOutsideMilli);
         }
 
 
@@ -188,9 +196,18 @@ public class HomeFeed extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Disconnect();
-                Intent intent = new Intent(getApplicationContext(), TimeOutsideActivity.class);
-                startActivity(intent);
+                if(timerRunning)
+                    Toast.makeText(getApplicationContext(),"You must stop the current timer before you can set another one.",Toast.LENGTH_SHORT).show();
+                else{
+                    if(measuredUVIndex == -1){
+                        Toast.makeText(getApplicationContext(),"You must measure the UV index before setting a Timer", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Disconnect();
+                        Intent intent = new Intent(getApplicationContext(), Timer.class);
+                        startActivity(intent);
+                    }
+                }
             }
         });
         //new ConnectBT().execute();
@@ -315,95 +332,48 @@ public class HomeFeed extends AppCompatActivity {
     }
 
     public void startTimer(String timer) {
-        if (timer == "reapply") {
-            countdownTimer = new CountDownTimer(timeLeftInMilliReapply, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    timeLeftInMilliReapply = millisUntilFinished;
-                    updateTimer("reapply");
-                }
+        countdownTimer = new CountDownTimer(timeLeftInMilliReapply, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMilliReapply = millisUntilFinished;
+                updateTimer("reapply");
+            }
 
-                @Override
-                public void onFinish() {
+            @Override
+            public void onFinish() {
 
-                }
-            }.start();
-        } else {
-            countdownTimer = new CountDownTimer(timeLeftInMilliTimeOutside, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    timeLeftInMilliTimeOutside = millisUntilFinished;
-                    updateTimer("timeOutside");
-                }
-
-                @Override
-                public void onFinish() {
-
-                }
-            }.start();
-        }
-
-
+            }
+        }.start();
+        stopTimerButton.setVisibility(View.VISIBLE);
+        timerRunning = true;
     }
 
     public void updateTimer(String timer) {
-        if (timer == "reapply") {
-            int minutes = (int) timeLeftInMilliReapply / 60000;
-            int seconds = (int) timeLeftInMilliReapply % 60000 / 1000;
+        int minutes = (int) timeLeftInMilliReapply / 60000;
+        int seconds = (int) timeLeftInMilliReapply % 60000 / 1000;
 
-            String timeleftText;
-            timeleftText = "" + minutes;
-            timeleftText += ":";
-            if (seconds < 10)
-                timeleftText += "0";
-            timeleftText += seconds;
+        String timeleftText;
+        timeleftText = "" + minutes;
+        timeleftText += ":";
+        if (seconds < 10)
+            timeleftText += "0";
+        timeleftText += seconds;
 
-            countDownText.setText(timeleftText);
-            if(countDownText.getText().equals("0:01")){
+        countDownText.setText(timeleftText);
+        if(countDownText.getText().equals("0:01")){
 
-            }
-            if((countDownText.getText().equals("0:00")) || (countDownText.getText().equals("00:00")) || (countDownText.getText().equals("000:00"))){
-                if(timeLeftInMilliTimeOutside > totalReapplyTimeMilli) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            pushNotification("Reapply", "It is time to reapply sunscreen");
-                            TimerSetup("reapply", totalReapplyTimeMilli);
-                        }
-                    }, 1000);
-                }
-            }
         }
-        else{
-            int minutes = (int) timeLeftInMilliTimeOutside/60000;
-            int seconds = (int) timeLeftInMilliTimeOutside % 60000 / 1000;
-
-            String timeleftText;
-            timeleftText = "" + minutes;
-            timeleftText += ":";
-            if (seconds < 10)
-                timeleftText += "0";
-            timeleftText += seconds;
-
-            timeOutsideText.setText(timeleftText);
-            if(timeOutsideText.getText().equals("0:01")){
-                pushNotification("Finished!", "Your outdoor sesssion is complete.");
-            }
+        if(((countDownText.getText().equals("0:00")) || (countDownText.getText().equals("00:00")) || (countDownText.getText().equals("000:00"))) && timerRunning){
+            pushNotification("Reapply", "It is time to reapply sunscreen");
+            TimerSetup("reapply", totalReapplyTimeMilli + 1000);
         }
-
     }
 
 
     public void TimerSetup(String timer, int time){
-        if(timer == "reapply"){
             timeLeftInMilliReapply = time;
             startTimer(timer);
             timeUntilReapplyTextView.setText("Time until next Reapply:");
-        } else {
-            timeLeftInMilliTimeOutside = time;
-            startTimer(timer);
-            timeOutsideTimerTextView.setText("Remaining time in outdoor session:");
-        }
     }
 
     //Android documentation https://developer.android.com/training/notify-user/build-notification
@@ -427,6 +397,14 @@ public class HomeFeed extends AppCompatActivity {
         wakeLock.release();
     }
 
+    public void stopTimer(View view){
+        timerRunning = !timerRunning;
+        stopTimerButton.setVisibility(View.INVISIBLE);
+        countDownText.setVisibility(View.INVISIBLE);
+        timeUntilReapplyTextView.setVisibility(View.INVISIBLE);
+        timeLeftInMilliReapply = 0;
+    }
+
     //Handler viewHandler = new Handler();
     //public EmulatorView mEmulatorView;
         //Runnable updateView = new Runnable() {
@@ -444,5 +422,9 @@ public class HomeFeed extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        //do nothing
+    }
 }
 
