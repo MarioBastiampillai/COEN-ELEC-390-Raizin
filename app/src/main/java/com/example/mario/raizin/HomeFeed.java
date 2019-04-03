@@ -90,8 +90,9 @@ public class HomeFeed extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item2:
+                Intent intent1 = getIntent();
+                currentScoreTrack = intent1.getIntExtra("SCORE_TRACK", 0);
                 Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
-                currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
                 intent.putExtra("SCORE_TRACK", currentScoreTrack);
                 startActivity(intent);
                 return true;
@@ -133,8 +134,10 @@ public class HomeFeed extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-
+        currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
         address = intent.getStringExtra(DeviceList.EXTRA_ADDRESS);
+
+
 
         //SharedPreferences myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
 
