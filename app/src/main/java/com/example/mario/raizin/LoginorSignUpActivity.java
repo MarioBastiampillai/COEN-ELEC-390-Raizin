@@ -103,10 +103,10 @@ public class LoginorSignUpActivity extends AppCompatActivity {
                 intent.putExtra("userName",userNameInput);
                 String[] stringArray = new String[mStringList.size()];
                 stringArray = mStringList.toArray(stringArray);
-                SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                /*SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(originalName, stringArray[0]);
-                editor.commit();
+                editor.commit();*/
                 startActivity(intent);
                 //put into sharedPreference in indexPage
                 //put the userNameInput into mStringList, sharedPreference

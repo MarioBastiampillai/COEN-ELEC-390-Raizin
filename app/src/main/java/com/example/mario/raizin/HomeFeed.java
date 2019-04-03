@@ -24,6 +24,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,15 +44,13 @@ import java.io.InputStream;
 import java.util.Set;
 import java.util.UUID;
 
+
+
 public class HomeFeed extends AppCompatActivity{
 
     PowerManager.WakeLock wakeLock;
 
     Handler viewHandler = new Handler();
-    //private static final String TAG = "MyActivity";
-    //Log.i(TAG, "exec1");
-    // nick bluetooth
-    //BluetoothAdapter bluetoothAdapter = null;
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket bluetoothSocket = null;
     Set<BluetoothDevice> pairedBluetoothDevices;
@@ -85,6 +84,12 @@ public class HomeFeed extends AppCompatActivity{
     int currentScoreTrack;
     FloatingActionButton floatingActionButton;
     public TextView skinTypeDisplayObject;
+    private DrawerLayout drawer;
+    SharedPreferences sharedPreferences;                //creation of a SharedPreference object to be used to input data
+    public static final String MyPREFERENCES="MyPrefs";
+    public static final String Name="nameKey";
+    public static final String selectedName="selectedNameKey";
+    public static final String SkinType="skinTypeKey";
 
 
     @Override
@@ -119,28 +124,17 @@ public class HomeFeed extends AppCompatActivity{
                 return super.onOptionsItemSelected(item);
         }
     }
-
-//    @Override
-//    protected void onStart()
-//    {
-//        super.onStart();
-//        viewHandler.post(updateView);
-//    }
-    ActionBarDrawerToggle toggle;
-    private DrawerLayout drawer;
-    SharedPreferences sharedPreferences;                //creation of a SharedPreference object to be used to input data
-    public static final String MyPREFERENCES="MyPrefs";
-    public static final String Name="nameKey";
-    public static final String selectedName="selectedNameKey";
-    public static final String SkinType="skinTypeKey";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_feed);
-        Toolbar toolbar=findViewById(R.id.toolbar);
+        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbarId);
         setSupportActionBar(toolbar);
         drawer=findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         welcomeMessage=findViewById(R.id.welcomeName);
         skinTypeDisplayObject=findViewById(R.id.skinTypeDisplay);
         Intent getName=getIntent();
@@ -210,9 +204,7 @@ public class HomeFeed extends AppCompatActivity{
                         return true;
                     }
                 });
-        //ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //drawer.addDrawerListener(toggle);
-        //toggle.syncState();
+
         createNotificationChannel();
 
         //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
