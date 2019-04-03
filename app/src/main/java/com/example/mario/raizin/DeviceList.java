@@ -80,10 +80,10 @@ public class DeviceList extends AppCompatActivity {
             String info = ((TextView) view).getText().toString();
             String address = info.substring(info.length()-17);// gets bluetooth address
 
-            Intent i = new Intent(getApplicationContext(), HomeFeed.class);
+            Intent i = new Intent(getApplicationContext(), UVDisplay.class);
             i.putExtra(EXTRA_ADDRESS, address);
-            deviceScoreTrack = i.getIntExtra("SCORE_TRACK", 0);
-            i.putExtra("SCORE_TRACK", deviceScoreTrack);
+            //deviceScoreTrack = i.getIntExtra("SCORE_TRACK", 0);
+           // i.putExtra("SCORE_TRACK", deviceScoreTrack);
 
 
             //myPrefs.edit().putString("device_add", address).apply();
