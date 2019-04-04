@@ -92,12 +92,12 @@ public class HomeFeed extends AppCompatActivity{
     public static final String SkinType="skinTypeKey";
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.example_menu, menu);
         return true;
-    }
+    }*/
 
 
     @Override
@@ -130,6 +130,9 @@ public class HomeFeed extends AppCompatActivity{
         setContentView(R.layout.activity_home_feed);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbarId);
         setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         drawer=findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -200,6 +203,9 @@ public class HomeFeed extends AppCompatActivity{
                                 Intent intentGeneralInformation = new Intent(getApplicationContext(), GeneralInformationActivity.class);
                                 startActivity(intentGeneralInformation);
                                 break;
+                            case R.id.nav_logout:
+                                Intent intentLoginorSignUpActivity = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
+                                startActivity(intentLoginorSignUpActivity);
                         }
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
