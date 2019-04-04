@@ -39,23 +39,23 @@ public class HomeFeed extends AppCompatActivity {
 
     PowerManager.WakeLock wakeLock;
 
-    Handler viewHandler = new Handler();
+//    Handler viewHandler = new Handler();
     //private static final String TAG = "MyActivity";
     //Log.i(TAG, "exec1");
     // nick bluetooth
     //BluetoothAdapter bluetoothAdapter = null;
-    BluetoothAdapter myBluetooth = null;
+//    BluetoothAdapter myBluetooth = null;
     BluetoothSocket bluetoothSocket = null;
     Set<BluetoothDevice> pairedBluetoothDevices;
-    String address = null;
+//    String address = null;
     String bluetoothDeviceName = null;
     Button uvButton;
-    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+//    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     int measuredUVIndex = -1;
-    String bluetoothSerial = null;
-    InputStream in;
-    private boolean isBtConnected = false;
-    BluetoothSocket btSocket = null;
+//    String bluetoothSerial = null;
+//    InputStream in;
+//    private boolean isBtConnected = false;
+//    BluetoothSocket btSocket = null;
     private ProgressDialog progress;
 
     private TextView countDownText;
@@ -131,11 +131,16 @@ public class HomeFeed extends AppCompatActivity {
         if(!timerRunning){
             stopTimerButton.setVisibility(View.GONE);
         }
+            if (StateSingleton.instance().getUV()==null ){
+                UVDisplayObject.setText("");
+            }
+            else {
 
-
+                UVDisplayObject.setText(StateSingleton.instance().getUV());
+            }
         Intent intent = getIntent();
         currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
-        address = intent.getStringExtra(DeviceList.EXTRA_ADDRESS);
+        //address = intent.getStringExtra(DeviceList.EXTRA_ADDRESS);
 
 
 
@@ -188,9 +193,10 @@ public class HomeFeed extends AppCompatActivity {
 
         uvButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-
+                Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                startActivity(intent);
                 //getInputData();
-                viewHandler.post(updateView);
+                //viewHandler.post(updateView);
             }
         });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -203,7 +209,7 @@ public class HomeFeed extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"You must measure the UV index before setting a Timer", Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        Disconnect();
+                        //Disconnect();
                         Intent intent = new Intent(getApplicationContext(), Timer.class);
                         startActivity(intent);
                     }
@@ -212,49 +218,49 @@ public class HomeFeed extends AppCompatActivity {
         });
         //new ConnectBT().execute();
 
-        try{
-            connectBluetoothDevice();
-        }catch(Exception exception){}
+//        try{
+//            connectBluetoothDevice();
+//        }catch(Exception exception){}
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "tag:");
         wakeLock.acquire();
 
-        viewHandler.post(updateView);
+//        viewHandler.post(updateView);
 
 
     }
 
-    //public EmulatorView mEmulatorView;
-    Runnable updateView = new Runnable() {
-        @Override
-        public void run() {
-            //mEmulatorView.invalidate();
-            viewHandler.postDelayed(updateView, 2000);
-            getInputData();
-
-        }
-    };
+//    //private EmulatorView mEmulatorView;
+//    Runnable updateView = new Runnable() {
+//        @Override
+//        public void run() {
+//            //mEmulatorView.invalidate();
+//            viewHandler.postDelayed(updateView, 2000);
+//            getInputData();
+//
+//        }
+//    };
 
     //Find all bluetooth pairs and get their address and name
-    public void connectBluetoothDevice() throws IOException {
-        boolean ConnectSuccess = true;
-        try{
-
-            if(myBluetooth == null || !isBtConnected) {
-                myBluetooth = BluetoothAdapter.getDefaultAdapter();
-                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);
-                btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);
-                BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                btSocket.connect();
-            }
-        }
-        catch (IOException e)
-        {
-            ConnectSuccess = false;//if the try failed, you can check the exception here
-        }
-
-    }
+//    public void connectBluetoothDevice() throws IOException {
+//        boolean ConnectSuccess = true;
+//        try{
+//
+//            if(myBluetooth == null || !isBtConnected) {
+//                myBluetooth = BluetoothAdapter.getDefaultAdapter();
+//                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);
+//                btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);
+//                BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+//                btSocket.connect();
+//            }
+//        }
+//        catch (IOException e)
+//        {
+//            ConnectSuccess = false;//if the try failed, you can check the exception here
+//        }
+//
+//    }
 
 //    public class ConnectBT extends AsyncTask<Void, Void, Void> {
 //        public boolean ConnectSuccess = true;
@@ -300,25 +306,25 @@ public class HomeFeed extends AppCompatActivity {
 //    }
 
 
-    private void getInputData() {
-        //InputStream in;
-        int bytes; //number of bytes read
-        byte[] buffer = new byte[4]; //read 4 bytes from bluetooth to store 1 float
-        //String bluetoothSerial=null;
-        try {
-            if (!(btSocket == null)) {
-                in = btSocket.getInputStream();
-                in.read(buffer, 0, 4);
-
-                bluetoothSerial = new String(buffer, 0, 4);
-            } else {
-                bluetoothSerial = null;
-            }
-        } catch (Exception exception) {
-        }
-        //Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
-        UVDisplayObject.setText(bluetoothSerial);
-    }
+//    private void getInputData() {
+//        //InputStream in;
+//        int bytes; //number of bytes read
+//        byte[] buffer = new byte[4]; //read 4 bytes from bluetooth to store 1 float
+//        //String bluetoothSerial=null;
+//        try {
+//            if (!(btSocket == null)) {
+//                in = btSocket.getInputStream();
+//                in.read(buffer, 0, 4);
+//
+//                bluetoothSerial = new String(buffer, 0, 4);
+//            } else {
+//                bluetoothSerial = null;
+//            }
+//        } catch (Exception exception) {
+//        }
+//        //Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
+//        UVDisplayObject.setText(bluetoothSerial);
+//    }
 
     void pushNotification(String title, String content) {
         NotificationManager NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -410,17 +416,17 @@ public class HomeFeed extends AppCompatActivity {
         //Runnable updateView = new Runnable() {
             //@Override
             //public void run() {
-    private void Disconnect() {
-        if (btSocket != null) //If the btSocket is busy
-        {
-            try {
-                btSocket.close(); //close connection
-            } catch (IOException e) { //msg("Error");}
-            }
-            finish(); //return to the first layout
-
-        }
-    }
+//    private void Disconnect() {
+//        if (btSocket != null) //If the btSocket is busy
+//        {
+//            try {
+//                btSocket.close(); //close connection
+//            } catch (IOException e) { //msg("Error");}
+//            }
+//            finish(); //return to the first layout
+//
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
