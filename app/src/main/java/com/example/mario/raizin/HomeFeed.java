@@ -137,6 +137,11 @@ public class HomeFeed extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         welcomeMessage=findViewById(R.id.welcomeName);
         skinTypeDisplayObject=findViewById(R.id.skinTypeDisplay);
+
+        //SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        //String nameGiven=sharedPreferences.getString("nameKey", null);
+        //String nameGivenFromLogin=sharedPreferences.getString("goToHomeFeed", null);
+        //String skinTypeGivenFromLogin=sharedPreferences.getString("skinTypeDisplay", null);
         Intent getName=getIntent();
         String nameGiven=getName.getStringExtra("passedNameToDeviceList");
         Intent getNameFromLogin=getIntent();
@@ -148,7 +153,7 @@ public class HomeFeed extends AppCompatActivity{
             welcomeMessage.setText("Welcome, "+nameGivenFromLogin);
         }
         else{
-            welcomeMessage.setText("Welcome, "+nameGiven);
+            welcomeMessage.setText("Welcome, "+nameGiven);  //was nameGiven
         }
         if(!TextUtils.isEmpty(skinTypeGivenFromLogin))
         {
@@ -177,7 +182,7 @@ public class HomeFeed extends AppCompatActivity{
         sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(selectedName, nameGivenFromLogin);
-        editor.putString(Name, nameGiven);
+        editor.putString(Name, nameGiven);  //was nameGiven
         editor.putString(SkinType, skinTypeGet);
         editor.commit();
 
