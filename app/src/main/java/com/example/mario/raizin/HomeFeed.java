@@ -432,5 +432,18 @@ public class HomeFeed extends AppCompatActivity {
     public void onBackPressed() {
         //do nothing
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(StateSingleton.instance().getUV()!=null)
+            measuredUVIndex = Integer.parseInt(StateSingleton.instance().getUV());
+        if(measuredUVIndex >= 8)
+            warningTextView.setVisibility(View.VISIBLE);
+        else{
+            warningTextView.setVisibility(View.INVISIBLE);
+        }
+    }
+
 }
 
