@@ -62,7 +62,7 @@ public class HomeFeed extends AppCompatActivity {
     private TextView timeOutsideText;
     private TextView timeOutsideTimerTextView;
     private TextView timeUntilReapplyTextView;
-//    public TextView UVDisplayObject;
+    public TextView UVDisplayObject;
 
     private CountDownTimer countdownTimer;
     private long timeLeftInMilliReapply; //SET this variable with max timer time
@@ -116,7 +116,7 @@ public class HomeFeed extends AppCompatActivity {
 
         //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
         uvButton = (Button) findViewById(R.id.uvButton);
-     //   UVDisplayObject = (TextView) findViewById(R.id.UVDisplay);
+        UVDisplayObject = (TextView) findViewById(R.id.UVDisplay);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButtonID);
         warningTextView = findViewById(R.id.warningTextView);
         if(measuredUVIndex >= 8)
@@ -131,8 +131,13 @@ public class HomeFeed extends AppCompatActivity {
         if(!timerRunning){
             stopTimerButton.setVisibility(View.GONE);
         }
+            if (StateSingleton.instance().getUV()==null ){
+                UVDisplayObject.setText("");
+            }
+            else {
 
-
+                UVDisplayObject.setText(StateSingleton.instance().getUV());
+            }
         Intent intent = getIntent();
         currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
         //address = intent.getStringExtra(DeviceList.EXTRA_ADDRESS);
