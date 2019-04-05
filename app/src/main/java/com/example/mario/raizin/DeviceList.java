@@ -52,13 +52,13 @@ public class DeviceList extends AppCompatActivity {
         btnPaired.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    //pairedDevicesList();  //was pairedDevicesList();
-                Intent i = new Intent(getApplicationContext(), HomeFeed.class);
-                Intent intent4=getIntent();
-                String passedNameToDeviceListString=intent4.getStringExtra("passedNameToDeviceList");
-                i.putExtra("passedNameToDeviceList", passedNameToDeviceListString);
+                pairedDevicesList();  //was pairedDevicesList();
+                //Intent i = new Intent(getApplicationContext(), UVDisplay.class);
+                //Intent intent4=getIntent();
+                //String passedNameToDeviceListString=intent4.getStringExtra("passedNameToDeviceList");
+                //i.putExtra("passedNameToDeviceList", passedNameToDeviceListString);
                 //myPrefs.edit().putString("device_add", address).apply();
-                startActivity(i);
+                //startActivity(i);
             }
         });
     }

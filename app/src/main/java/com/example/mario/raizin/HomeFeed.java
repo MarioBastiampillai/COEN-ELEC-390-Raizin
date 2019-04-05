@@ -539,9 +539,9 @@ public class HomeFeed extends AppCompatActivity{
 //        }
 //    }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         //do nothing
-    }
+    }*/
 }
 

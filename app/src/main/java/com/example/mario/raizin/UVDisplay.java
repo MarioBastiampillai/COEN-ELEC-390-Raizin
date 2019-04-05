@@ -63,7 +63,10 @@ public class UVDisplay extends AppCompatActivity {
             public void onClick(View arg0) {
 
                 Disconnect();
+                //Intent intent=getIntent();
+                //String userNameString=intent.getStringExtra("passedNameToDeviceList");
                 Intent i = new Intent(getApplicationContext(), HomeFeed.class);
+                //i.putExtra("passedNameToDeviceList", userNameString);
                 startActivity(i);
             }
         });
