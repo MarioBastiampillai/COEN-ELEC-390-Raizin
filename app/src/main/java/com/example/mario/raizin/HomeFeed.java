@@ -3,25 +3,17 @@ package com.example.mario.raizin;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Handler;
 import android.os.PowerManager;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,50 +21,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v4.app.NotificationManagerCompat;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Set;
-import java.util.UUID;
 
 public class HomeFeed extends AppCompatActivity {
 
     PowerManager.WakeLock wakeLock;
-
-//    Handler viewHandler = new Handler();
-    //private static final String TAG = "MyActivity";
-    //Log.i(TAG, "exec1");
-    // nick bluetooth
-    //BluetoothAdapter bluetoothAdapter = null;
-//    BluetoothAdapter myBluetooth = null;
     BluetoothSocket bluetoothSocket = null;
     Set<BluetoothDevice> pairedBluetoothDevices;
-//    String address = null;
     String bluetoothDeviceName = null;
     Button uvButton;
-//    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     int measuredUVIndex = -1;
-//    String bluetoothSerial = null;
-//    InputStream in;
-//    private boolean isBtConnected = false;
-//    BluetoothSocket btSocket = null;
     private ProgressDialog progress;
 
     private TextView countDownText;
@@ -80,11 +39,6 @@ public class HomeFeed extends AppCompatActivity {
     private TextView timeOutsideTimerTextView;
     private TextView timeUntilReapplyTextView;
     public TextView UVDisplayObject;
-    //facebook
-    private TextView info;
-    private LoginButton loginButton;
-    private CallbackManager callbackManager;
-    //facebook
     private CountDownTimer countdownTimer;
     private long timeLeftInMilliReapply; //SET this variable with max timer time
     private long timeLeftInMilliTimeOutside; //set this variable with time outside
@@ -98,6 +52,7 @@ public class HomeFeed extends AppCompatActivity {
     int currentScoreTrack;
     FloatingActionButton floatingActionButton;
     Button stopTimerButton;
+    Button lFbButton;
 
 
     @Override
@@ -122,55 +77,29 @@ public class HomeFeed extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onStart()
-//    {
-//        super.onStart();
-//        viewHandler.post(updateView);
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_feed);
         createNotificationChannel();
 
-//login facebook button
-        loginButton = findViewById(R.id.login_button);
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
-        callbackManager = CallbackManager.Factory.create();
-
-        info = (TextView) findViewById(R.id.info);
-
-        loginButton = (LoginButton)findViewById(R.id.login_button);
-
-        checkLoginStatus();
-        // loginButton.setReadPermissions(Arrays.asList("info"));
-
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-        });
-// facebook
 
         //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
         uvButton = (Button) findViewById(R.id.uvButton);
         UVDisplayObject = (TextView) findViewById(R.id.UVDisplay);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButtonID);
+
+        lFbButton = findViewById(R.id.login_button);
+        lFbButton = (Button) findViewById(R.id.login_button);
+        lFbButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent intent = new Intent(getApplicationContext(), facebook.class);
+                startActivity(intent);
+            }
+        });
+
+
+
         warningTextView = findViewById(R.id.warningTextView);
         if (measuredUVIndex >= 8)
             warningTextView.setVisibility(View.VISIBLE);
@@ -184,13 +113,13 @@ public class HomeFeed extends AppCompatActivity {
         if (!timerRunning) {
             stopTimerButton.setVisibility(View.GONE);
         }
-            if (StateSingleton.instance().getUV()==null ){
-                UVDisplayObject.setText("");
-            }
-            else {
+        if (StateSingleton.instance().getUV()==null ){
+            UVDisplayObject.setText("");
+        }
+        else {
 
-                UVDisplayObject.setText(StateSingleton.instance().getUV());
-            }
+            UVDisplayObject.setText(StateSingleton.instance().getUV());
+        }
         Intent intent = getIntent();
         currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
         //address = intent.getStringExtra(DeviceList.EXTRA_ADDRESS);
@@ -248,8 +177,6 @@ public class HomeFeed extends AppCompatActivity {
             public void onClick(View arg0) {
                 Intent intent = new Intent(getApplicationContext(), DeviceList.class);
                 startActivity(intent);
-                //getInputData();
-                //viewHandler.post(updateView);
             }
         });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -269,191 +196,13 @@ public class HomeFeed extends AppCompatActivity {
                 }
             }
         });
-        //new ConnectBT().execute();
-
-//        try{
-//            connectBluetoothDevice();
-//        }catch(Exception exception){}
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "tag:");
         wakeLock.acquire();
 
-//        viewHandler.post(updateView);
-
-
     }
 
-//    //private EmulatorView mEmulatorView;
-//    Runnable updateView = new Runnable() {
-//        @Override
-//        public void run() {
-//            //mEmulatorView.invalidate();
-//            viewHandler.postDelayed(updateView, 2000);
-//            getInputData();
-//
-//        }
-//    };
-    //facebook
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        callbackManager.onActivityResult(requestCode,  resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    AccessTokenTracker tokenTracker = new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
-        {
-            if(currentAccessToken==null)
-            {
-//                txtName.setText("");
-//                txtEmail.setText("");
-//                circleImageView.setImageResource(0);
-//                Toast.makeText(MainActivity.this,"User Logged out",Toast.LENGTH_LONG).show();
-            }
-            else
-                loaduserProfile(currentAccessToken);
-
-        }
-    };
-
-    private void loaduserProfile(AccessToken newAccessToken) {
-
-        GraphRequest request = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-                try {
-                    String first_name = object.getString("first_name");
-                    String last_name = object.getString("last_name");
-                    String email = object.getString("email");
-                    String id = object.getString("id");
-                    String image_url = "https://graph.facebook.com/"+id+ "/picture?type=normal";
-
-
-//                    txtEmail.setText(email);
-                    info.setText(first_name + " " +last_name);
-
-//                    Glide.with(MainActivity.this).load(image_url).into(circleImageView);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields","first_name,last_name,email,id");
-        request.setParameters(parameters);
-        request.executeAsync();
-
-    }
-
-    private void checkLoginStatus()
-    {
-        if(AccessToken.getCurrentAccessToken()!=null)
-        {
-            loaduserProfile(AccessToken.getCurrentAccessToken());
-        }
-    }
-
-//facebook
-
-
-
-
-    //public EmulatorView mEmulatorView;
-    Runnable updateView = new Runnable() {
-        @Override
-        public void run() {
-            //mEmulatorView.invalidate();
-            viewHandler.postDelayed(updateView, 2000);
-            getInputData();
-
-    //Find all bluetooth pairs and get their address and name
-//    public void connectBluetoothDevice() throws IOException {
-//        boolean ConnectSuccess = true;
-//        try{
-//
-//            if(myBluetooth == null || !isBtConnected) {
-//                myBluetooth = BluetoothAdapter.getDefaultAdapter();
-//                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);
-//                btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);
-//                BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-//                btSocket.connect();
-//            }
-//        }
-//        catch (IOException e)
-//        {
-//            ConnectSuccess = false;//if the try failed, you can check the exception here
-//        }
-//
-//    }
-
-//    public class ConnectBT extends AsyncTask<Void, Void, Void> {
-//        public boolean ConnectSuccess = true;
-//
-//        @Override
-//        protected void onPreExecute() {
-//            progress = ProgressDialog.show(HomeFeed.this, "Connecting...", "Please Wait!!!");
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... devices) {
-//            try {
-//                if (btSocket == null || !isBtConnected) {
-//                    myBluetooth = BluetoothAdapter.getDefaultAdapter();
-//                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);
-//                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);
-//                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-//                    btSocket.connect();
-//                    ConnectSuccess = true;
-//
-//                }
-//            } catch (IOException e) {
-//                ConnectSuccess = false;
-//            }
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void result) {
-//            super.onPostExecute(result);
-//
-//            if (!ConnectSuccess) {
-//                //msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
-//                //finish();
-//            } else {
-//                //msg("Connected");
-//                isBtConnected = true;
-//            }
-//
-//            progress.dismiss();
-//        }
-//    }
-
-
-//    private void getInputData() {
-//        //InputStream in;
-//        int bytes; //number of bytes read
-//        byte[] buffer = new byte[4]; //read 4 bytes from bluetooth to store 1 float
-//        //String bluetoothSerial=null;
-//        try {
-//            if (!(btSocket == null)) {
-//                in = btSocket.getInputStream();
-//                in.read(buffer, 0, 4);
-//
-//                bluetoothSerial = new String(buffer, 0, 4);
-//            } else {
-//                bluetoothSerial = null;
-//            }
-//        } catch (Exception exception) {
-//        }
-//        //Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
-//        UVDisplayObject.setText(bluetoothSerial);
-//    }
 
     void pushNotification(String title, String content) {
         NotificationManager NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -540,33 +289,6 @@ public class HomeFeed extends AppCompatActivity {
         timeLeftInMilliReapply = 0;
     }
 
-    //Handler viewHandler = new Handler();
-    //public EmulatorView mEmulatorView;
-    //Runnable updateView = new Runnable() {
-    //@Override
-    //public void run() {
-    private void Disconnect() {
-        if (btSocket != null) //If the btSocket is busy
-        {
-            try {
-                btSocket.close(); //close connection
-            } catch (IOException e) { //msg("Error");}
-            }
-            finish(); //return to the first layout
-        //Runnable updateView = new Runnable() {
-            //@Override
-            //public void run() {
-//    private void Disconnect() {
-//        if (btSocket != null) //If the btSocket is busy
-//        {
-//            try {
-//                btSocket.close(); //close connection
-//            } catch (IOException e) { //msg("Error");}
-//            }
-//            finish(); //return to the first layout
-//
-//        }
-//    }
 
     @Override
     public void onBackPressed() {

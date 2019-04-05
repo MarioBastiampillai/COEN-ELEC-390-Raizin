@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mario.raizin">
 
@@ -16,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UVDisplay"></activity>
+        <activity android:name=".facebook"></activity>
+        <activity android:name=".UVDisplay" />
         <activity android:name=".DeviceList" />
         <activity android:name=".userPersonalization" />
         <activity
@@ -28,16 +30,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!--//facebook-->
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:label="@string/app_name"/>
-        <!--//facebook-->
-
+        </activity> <!-- //facebook -->
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- //facebook -->
         <activity
             android:name=".HomeFeed"
             android:parentActivityName=".DeviceList"
@@ -53,11 +51,10 @@
             android:parentActivityName=".TimeOutsideActivity" />
         <activity
             android:name=".CustomTimer"
-            android:parentActivityName=".Timer" />
-<!--//facebook-->
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-<!--//facebook-->
+            android:parentActivityName=".Timer" /> <!-- //facebook -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="123456908761030" />
     </application>
 
 </manifest>
