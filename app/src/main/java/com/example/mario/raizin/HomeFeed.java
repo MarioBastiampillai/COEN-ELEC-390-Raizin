@@ -51,7 +51,7 @@ public class HomeFeed extends AppCompatActivity {
     String bluetoothDeviceName = null;
     Button uvButton;
 //    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    int measuredUVIndex = -1;
+    double measuredUVIndex = -1;
 //    String bluetoothSerial = null;
 //    InputStream in;
 //    private boolean isBtConnected = false;
@@ -64,7 +64,7 @@ public class HomeFeed extends AppCompatActivity {
     private TextView timeUntilReapplyTextView;
     public TextView UVDisplayObject;
 
-    private CountDownTimer countdownTimer;
+    private CountDownTimer countDownTimer;
     private long timeLeftInMilliReapply; //SET this variable with max timer time
     private long timeLeftInMilliTimeOutside; //set this variable with time outside
     private boolean timerRunning;
@@ -338,7 +338,7 @@ public class HomeFeed extends AppCompatActivity {
     }
 
     public void startTimer(String timer) {
-        countdownTimer = new CountDownTimer(timeLeftInMilliReapply, 1000) {
+        countDownTimer = new CountDownTimer(timeLeftInMilliReapply, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeftInMilliReapply = millisUntilFinished;
@@ -366,11 +366,10 @@ public class HomeFeed extends AppCompatActivity {
         timeleftText += seconds;
 
         countDownText.setText(timeleftText);
-        if(countDownText.getText().equals("0:01")){
 
-        }
-        if(((countDownText.getText().equals("0:00")) || (countDownText.getText().equals("00:00")) || (countDownText.getText().equals("000:00"))) && timerRunning){
-            pushNotification("Reapply", "It is time to reapply sunscreen");
+        if(((countDownText.getText().equals("0:00")) || (countDownText.getText().equals("00:00")) || (countDownText.getText().equals("000:00")))){
+            if(timerRunning)
+                pushNotification("Reapply", "It is time to reapply sunscreen");
             TimerSetup("reapply", totalReapplyTimeMilli + 1000);
         }
     }
@@ -409,6 +408,7 @@ public class HomeFeed extends AppCompatActivity {
         countDownText.setVisibility(View.INVISIBLE);
         timeUntilReapplyTextView.setVisibility(View.INVISIBLE);
         timeLeftInMilliReapply = 0;
+        countDownTimer.cancel();
     }
 
     //Handler viewHandler = new Handler();
@@ -437,8 +437,9 @@ public class HomeFeed extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         if(StateSingleton.instance().getUV()!=null)
-            measuredUVIndex = Integer.parseInt(StateSingleton.instance().getUV());
-        if(measuredUVIndex >= 8)
+            //measuredUVIndex = Integer.parseInt(StateSingleton.instance().getUV());
+            measuredUVIndex = Double.parseDouble(StateSingleton.instance().getUV());
+        if(measuredUVIndex >= 1)
             warningTextView.setVisibility(View.VISIBLE);
         else{
             warningTextView.setVisibility(View.INVISIBLE);
