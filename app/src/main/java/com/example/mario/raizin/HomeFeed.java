@@ -208,8 +208,11 @@ public class HomeFeed extends AppCompatActivity{
                             case R.id.nav_information:    //was navigation_item_1
                                 //Do some thing here
                                 // add navigation drawer item onclick method here
-                                Intent intentGeneralInformation = new Intent(getApplicationContext(), GeneralInformationActivity.class);
-                                startActivity(intentGeneralInformation);
+                                Intent intent1 = getIntent();
+                                currentScoreTrack = intent1.getIntExtra("SCORE_TRACK", 0);
+                                Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
+                                intent.putExtra("SCORE_TRACK", currentScoreTrack);
+                                startActivity(intent);
                                 break;
                             case R.id.nav_logout:
                                 Intent intentLoginorSignUpActivity = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
