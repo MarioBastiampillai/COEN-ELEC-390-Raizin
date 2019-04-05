@@ -146,7 +146,7 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
 
                     Toast.makeText(getApplicationContext(), String.valueOf(scoreTrack), Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                    Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
                     intent.putExtra("SCORE_TRACK", scoreTrack);
                     intent.putExtra("passedNameToDeviceList", passedNameString);
                     startActivity(intent);

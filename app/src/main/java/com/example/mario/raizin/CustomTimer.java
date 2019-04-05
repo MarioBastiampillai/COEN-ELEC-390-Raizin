@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class CustomTimer extends AppCompatActivity {
 
@@ -39,19 +40,32 @@ public class CustomTimer extends AppCompatActivity {
     }
 
     public void setTimerClick(View view){
-        int reapplyTimeMinutes = Integer.parseInt(customMinutesEditText.getText().toString());
-        int reapplyTime = minutesToMilliseconds(reapplyTimeMinutes);
-        int timeOutsidemilli = minutesToMilliseconds(timeOutsideMinutes);
-        Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
-        intent.putExtra(EXTRA_TIME_OUTSIDE, timeOutsidemilli);
-        intent.putExtra(EXTRA_REAPPLY_TIME, reapplyTime);
-        intent.putExtra(EXTRA_START_TIMER,1);
-        intent.putExtra("FROM_ACTIVITY", "recommended");
+        String reapplyTimeMinutesString = customMinutesEditText.getText().toString();
 
-        System.out.println("FROM CUSTOM ACTIVITY, time outside, then reapplytime");
-        System.out.println(timeOutsidemilli);
-        System.out.println(reapplyTime);
-        startActivity(intent);
+
+        if(reapplyTimeMinutesString.isEmpty() || reapplyTimeMinutesString.length() == 0 || reapplyTimeMinutesString.equals("") || reapplyTimeMinutesString == null){
+            Toast.makeText(getApplicationContext(),"Enter a valid time.",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            int reapplyTimeMinutes = Integer.parseInt(reapplyTimeMinutesString);
+            if(reapplyTimeMinutes > 0) {
+                int reapplyTime = minutesToMilliseconds(reapplyTimeMinutes);
+                int timeOutsidemilli = minutesToMilliseconds(timeOutsideMinutes);
+                Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
+                intent.putExtra(EXTRA_TIME_OUTSIDE, timeOutsidemilli);
+                intent.putExtra(EXTRA_REAPPLY_TIME, reapplyTime);
+                intent.putExtra(EXTRA_START_TIMER,1);
+                intent.putExtra("FROM_ACTIVITY", "recommended");
+
+                startActivity(intent);
+            }
+            else{
+                Toast.makeText(getApplicationContext(),"Enter a valid time.",Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+
     }
 
     public int minutesToMilliseconds(int minutes){

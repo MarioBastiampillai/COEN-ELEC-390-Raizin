@@ -50,19 +50,23 @@ public class HomeFeed extends AppCompatActivity{
 
     PowerManager.WakeLock wakeLock;
 
-    Handler viewHandler = new Handler();
-    BluetoothAdapter myBluetooth = null;
+//    Handler viewHandler = new Handler();
+    //private static final String TAG = "MyActivity";
+    //Log.i(TAG, "exec1");
+    // nick bluetooth
+    //BluetoothAdapter bluetoothAdapter = null;
+//    BluetoothAdapter myBluetooth = null;
     BluetoothSocket bluetoothSocket = null;
     Set<BluetoothDevice> pairedBluetoothDevices;
-    String address = null;
+//    String address = null;
     String bluetoothDeviceName = null;
     Button uvButton;
-    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+//    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     int measuredUVIndex = -1;
-    String bluetoothSerial = null;
-    InputStream in;
-    private boolean isBtConnected = false;
-    BluetoothSocket btSocket = null;
+//    String bluetoothSerial = null;
+//    InputStream in;
+//    private boolean isBtConnected = false;
+//    BluetoothSocket btSocket = null;
     private ProgressDialog progress;
 
     private TextView countDownText;
@@ -76,6 +80,7 @@ public class HomeFeed extends AppCompatActivity{
     private long timeLeftInMilliReapply; //SET this variable with max timer time
     private long timeLeftInMilliTimeOutside; //set this variable with time outside
     private boolean timerRunning;
+    TextView warningTextView;
 
     public int totalTimeOutsideMilli;
     public int totalReapplyTimeMilli;
@@ -90,6 +95,7 @@ public class HomeFeed extends AppCompatActivity{
     public static final String Name="nameKey";
     public static final String selectedName="selectedNameKey";
     public static final String SkinType="skinTypeKey";
+    Button stopTimerButton;
 
 
     /*@Override
@@ -115,8 +121,9 @@ public class HomeFeed extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item2:
+                Intent intent1 = getIntent();
+                currentScoreTrack = intent1.getIntExtra("SCORE_TRACK", 0);
                 Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
-                currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
                 intent.putExtra("SCORE_TRACK", currentScoreTrack);
                 startActivity(intent);
                 return true;
@@ -222,16 +229,31 @@ public class HomeFeed extends AppCompatActivity{
         uvButton = (Button) findViewById(R.id.uvButton);
         UVDisplayObject = (TextView) findViewById(R.id.UVDisplay);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButtonID);
-
+        warningTextView = findViewById(R.id.warningTextView);
+        if(measuredUVIndex >= 8)
+            warningTextView.setVisibility(View.VISIBLE);
+        else{
+            warningTextView.setVisibility(View.INVISIBLE);
+        }
 
         countDownText = findViewById(R.id.countdown_text);
-        timeOutsideText = findViewById(R.id.timeOutsideText);
         timeUntilReapplyTextView = findViewById(R.id.timeUntilReapplyTextView);
-        timeOutsideTimerTextView = findViewById(R.id.timeOutsideTimerTextView);
+        stopTimerButton = findViewById(R.id.stopTimerButton);
+        if(!timerRunning){
+            stopTimerButton.setVisibility(View.GONE);
+        }
+            if (StateSingleton.instance().getUV()==null ){
+                UVDisplayObject.setText("");
+            }
+            else {
 
+                UVDisplayObject.setText(StateSingleton.instance().getUV());
+            }
         Intent intent = getIntent();
+        currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
+        //address = intent.getStringExtra(DeviceList.EXTRA_ADDRESS);
 
-        address = intent.getStringExtra(DeviceList.EXTRA_ADDRESS);
+
 
         //SharedPreferences myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
 
@@ -261,16 +283,14 @@ public class HomeFeed extends AppCompatActivity{
 */
 
         String callingActivity2 = "" + callingActivity;
-        System.out.println("NICK HERES THE CALLING ACTIVITY:");
-        System.out.println(callingActivity);
         int timerStart;
 
         if (callingActivity2.length() == 11) {
-            totalTimeOutsideMilli = intent.getIntExtra(Timer.EXTRA_TIME_OUTSIDE, 0);
+            //totalTimeOutsideMilli = intent.getIntExtra(Timer.EXTRA_TIME_OUTSIDE, 0);
             totalReapplyTimeMilli = intent.getIntExtra(Timer.EXTRA_REAPPLY_TIME, 0);
             timerStart = intent.getIntExtra(Timer.EXTRA_START_TIMER, 0);
         } else {
-            totalTimeOutsideMilli = intent.getIntExtra(CustomTimer.EXTRA_TIME_OUTSIDE, 0);
+            //totalTimeOutsideMilli = intent.getIntExtra(CustomTimer.EXTRA_TIME_OUTSIDE, 0);
             totalReapplyTimeMilli = intent.getIntExtra(CustomTimer.EXTRA_REAPPLY_TIME, 0);
             timerStart = intent.getIntExtra(CustomTimer.EXTRA_START_TIMER, 0);
         }
@@ -278,70 +298,80 @@ public class HomeFeed extends AppCompatActivity{
 
         if (timerStart == 1) {
             TimerSetup("reapply", totalReapplyTimeMilli);
-            TimerSetup("timeOutside", totalTimeOutsideMilli);
+            //TimerSetup("timeOutside", totalTimeOutsideMilli);
         }
 
 
         uvButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-
+                Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                startActivity(intent);
                 //getInputData();
-                viewHandler.post(updateView);
+                //viewHandler.post(updateView);
             }
         });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Disconnect();
-                Intent intent = new Intent(getApplicationContext(), TimeOutsideActivity.class);
-                startActivity(intent);
+                if(timerRunning)
+                    Toast.makeText(getApplicationContext(),"You must stop the current timer before you can set another one.",Toast.LENGTH_SHORT).show();
+                else{
+                    if(measuredUVIndex == -1){
+                        Toast.makeText(getApplicationContext(),"You must measure the UV index before setting a Timer", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        //Disconnect();
+                        Intent intent = new Intent(getApplicationContext(), Timer.class);
+                        startActivity(intent);
+                    }
+                }
             }
         });
         //new ConnectBT().execute();
 
-        try{
-            connectBluetoothDevice();
-        }catch(Exception exception){}
+//        try{
+//            connectBluetoothDevice();
+//        }catch(Exception exception){}
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "tag:");
         wakeLock.acquire();
 
-        viewHandler.post(updateView);
+//        viewHandler.post(updateView);
 
 
     }
 
-    //public EmulatorView mEmulatorView;
-    Runnable updateView = new Runnable() {
-        @Override
-        public void run() {
-            //mEmulatorView.invalidate();
-            viewHandler.postDelayed(updateView, 2000);
-            getInputData();
-
-        }
-    };
+//    //private EmulatorView mEmulatorView;
+//    Runnable updateView = new Runnable() {
+//        @Override
+//        public void run() {
+//            //mEmulatorView.invalidate();
+//            viewHandler.postDelayed(updateView, 2000);
+//            getInputData();
+//
+//        }
+//    };
 
     //Find all bluetooth pairs and get their address and name
-    public void connectBluetoothDevice() throws IOException {
-        boolean ConnectSuccess = true;
-        try{
-
-            if(myBluetooth == null || !isBtConnected) {
-                myBluetooth = BluetoothAdapter.getDefaultAdapter();
-                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);
-                btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);
-                BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                btSocket.connect();
-            }
-        }
-        catch (IOException e)
-        {
-            ConnectSuccess = false;//if the try failed, you can check the exception here
-        }
-
-    }
+//    public void connectBluetoothDevice() throws IOException {
+//        boolean ConnectSuccess = true;
+//        try{
+//
+//            if(myBluetooth == null || !isBtConnected) {
+//                myBluetooth = BluetoothAdapter.getDefaultAdapter();
+//                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);
+//                btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);
+//                BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+//                btSocket.connect();
+//            }
+//        }
+//        catch (IOException e)
+//        {
+//            ConnectSuccess = false;//if the try failed, you can check the exception here
+//        }
+//
+//    }
 
 //    public class ConnectBT extends AsyncTask<Void, Void, Void> {
 //        public boolean ConnectSuccess = true;
@@ -387,25 +417,25 @@ public class HomeFeed extends AppCompatActivity{
 //    }
 
 
-    private void getInputData() {
-        //InputStream in;
-        int bytes; //number of bytes read
-        byte[] buffer = new byte[4]; //read 4 bytes from bluetooth to store 1 float
-        //String bluetoothSerial=null;
-        try {
-            if (!(btSocket == null)) {
-                in = btSocket.getInputStream();
-                in.read(buffer, 0, 4);
-
-                bluetoothSerial = new String(buffer, 0, 4);
-            } else {
-                bluetoothSerial = null;
-            }
-        } catch (Exception exception) {
-        }
-        //Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
-        UVDisplayObject.setText(bluetoothSerial);
-    }
+//    private void getInputData() {
+//        //InputStream in;
+//        int bytes; //number of bytes read
+//        byte[] buffer = new byte[4]; //read 4 bytes from bluetooth to store 1 float
+//        //String bluetoothSerial=null;
+//        try {
+//            if (!(btSocket == null)) {
+//                in = btSocket.getInputStream();
+//                in.read(buffer, 0, 4);
+//
+//                bluetoothSerial = new String(buffer, 0, 4);
+//            } else {
+//                bluetoothSerial = null;
+//            }
+//        } catch (Exception exception) {
+//        }
+//        //Toast.makeText(getApplicationContext(),bluetoothSerial, Toast.LENGTH_SHORT).show();
+//        UVDisplayObject.setText(bluetoothSerial);
+//    }
 
     void pushNotification(String title, String content) {
         NotificationManager NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -419,95 +449,48 @@ public class HomeFeed extends AppCompatActivity{
     }
 
     public void startTimer(String timer) {
-        if (timer == "reapply") {
-            countdownTimer = new CountDownTimer(timeLeftInMilliReapply, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    timeLeftInMilliReapply = millisUntilFinished;
-                    updateTimer("reapply");
-                }
+        countdownTimer = new CountDownTimer(timeLeftInMilliReapply, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMilliReapply = millisUntilFinished;
+                updateTimer("reapply");
+            }
 
-                @Override
-                public void onFinish() {
+            @Override
+            public void onFinish() {
 
-                }
-            }.start();
-        } else {
-            countdownTimer = new CountDownTimer(timeLeftInMilliTimeOutside, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    timeLeftInMilliTimeOutside = millisUntilFinished;
-                    updateTimer("timeOutside");
-                }
-
-                @Override
-                public void onFinish() {
-
-                }
-            }.start();
-        }
-
-
+            }
+        }.start();
+        stopTimerButton.setVisibility(View.VISIBLE);
+        timerRunning = true;
     }
 
     public void updateTimer(String timer) {
-        if (timer == "reapply") {
-            int minutes = (int) timeLeftInMilliReapply / 60000;
-            int seconds = (int) timeLeftInMilliReapply % 60000 / 1000;
+        int minutes = (int) timeLeftInMilliReapply / 60000;
+        int seconds = (int) timeLeftInMilliReapply % 60000 / 1000;
 
-            String timeleftText;
-            timeleftText = "" + minutes;
-            timeleftText += ":";
-            if (seconds < 10)
-                timeleftText += "0";
-            timeleftText += seconds;
+        String timeleftText;
+        timeleftText = "" + minutes;
+        timeleftText += ":";
+        if (seconds < 10)
+            timeleftText += "0";
+        timeleftText += seconds;
 
-            countDownText.setText(timeleftText);
-            if(countDownText.getText().equals("0:01")){
+        countDownText.setText(timeleftText);
+        if(countDownText.getText().equals("0:01")){
 
-            }
-            if((countDownText.getText().equals("0:00")) || (countDownText.getText().equals("00:00")) || (countDownText.getText().equals("000:00"))){
-                if(timeLeftInMilliTimeOutside > totalReapplyTimeMilli) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            pushNotification("Reapply", "It is time to reapply sunscreen");
-                            TimerSetup("reapply", totalReapplyTimeMilli);
-                        }
-                    }, 1000);
-                }
-            }
         }
-        else{
-            int minutes = (int) timeLeftInMilliTimeOutside/60000;
-            int seconds = (int) timeLeftInMilliTimeOutside % 60000 / 1000;
-
-            String timeleftText;
-            timeleftText = "" + minutes;
-            timeleftText += ":";
-            if (seconds < 10)
-                timeleftText += "0";
-            timeleftText += seconds;
-
-            timeOutsideText.setText(timeleftText);
-            if(timeOutsideText.getText().equals("0:01")){
-                pushNotification("Finished!", "Your outdoor sesssion is complete.");
-            }
+        if(((countDownText.getText().equals("0:00")) || (countDownText.getText().equals("00:00")) || (countDownText.getText().equals("000:00"))) && timerRunning){
+            pushNotification("Reapply", "It is time to reapply sunscreen");
+            TimerSetup("reapply", totalReapplyTimeMilli + 1000);
         }
-
     }
 
 
     public void TimerSetup(String timer, int time){
-        if(timer == "reapply"){
             timeLeftInMilliReapply = time;
             startTimer(timer);
             timeUntilReapplyTextView.setText("Time until next Reapply:");
-        } else {
-            timeLeftInMilliTimeOutside = time;
-            startTimer(timer);
-            timeOutsideTimerTextView.setText("Remaining time in outdoor session:");
-        }
     }
 
     //Android documentation https://developer.android.com/training/notify-user/build-notification
@@ -531,22 +514,34 @@ public class HomeFeed extends AppCompatActivity{
         wakeLock.release();
     }
 
+    public void stopTimer(View view){
+        timerRunning = !timerRunning;
+        stopTimerButton.setVisibility(View.INVISIBLE);
+        countDownText.setVisibility(View.INVISIBLE);
+        timeUntilReapplyTextView.setVisibility(View.INVISIBLE);
+        timeLeftInMilliReapply = 0;
+    }
+
     //Handler viewHandler = new Handler();
     //public EmulatorView mEmulatorView;
         //Runnable updateView = new Runnable() {
             //@Override
             //public void run() {
-    private void Disconnect() {
-        if (btSocket != null) //If the btSocket is busy
-        {
-            try {
-                btSocket.close(); //close connection
-            } catch (IOException e) { //msg("Error");}
-            }
-            finish(); //return to the first layout
+//    private void Disconnect() {
+//        if (btSocket != null) //If the btSocket is busy
+//        {
+//            try {
+//                btSocket.close(); //close connection
+//            } catch (IOException e) { //msg("Error");}
+//            }
+//            finish(); //return to the first layout
+//
+//        }
+//    }
 
-        }
+    @Override
+    public void onBackPressed() {
+        //do nothing
     }
-
 }
 
