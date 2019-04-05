@@ -34,8 +34,6 @@
             android:name=".HomeFeed"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-            android:parentActivityName=".DeviceList"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".GeneralInformationActivity"
             android:screenOrientation="portrait" />

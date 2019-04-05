@@ -31,6 +31,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
     public static final String MyPREFERENCES="MyPrefs";
     public static final String Name="nameKey";
     public static final String selectedName="selectedNameKey";
+    SharedPreferences sharedPreferences;
 
 
     ArrayList<String>  mStringList= new ArrayList<String>();
@@ -43,17 +44,12 @@ public class LoginorSignUpActivity extends AppCompatActivity {
         startInstruction=(TextView)findViewById(R.id.firstInstructionDisplay);
         nextInstruction=(TextView)findViewById(R.id.secondInstructionDisplay);
 
-        SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String name=sharedPreferences.getString("nameKey", null);
         String otherName=sharedPreferences.getString("selectedNameKey", null);
-        storedSkinType=sharedPreferences.getString("SkinTypeKey", null);
-
+        storedSkinType=sharedPreferences.getString("skinTypeKey", null);
 
         if(!TextUtils.isEmpty(name)&&TextUtils.isEmpty(otherName))
-        {
-            mStringList.add(name);
-        }
-        else if(!TextUtils.isEmpty(name)&&TextUtils.isEmpty(otherName))
         {
             mStringList.add(name);
         }
@@ -61,9 +57,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
         {
             mStringList.add(otherName);
         }
-        else{
-            Toast.makeText(getApplicationContext(), "Please enter a proper name", Toast.LENGTH_SHORT).show();
-        }
+
 
         String[] stringArray = new String[mStringList.size()];
         stringArray = mStringList.toArray(stringArray);
@@ -84,14 +78,15 @@ public class LoginorSignUpActivity extends AppCompatActivity {
                 String[] stringArray = new String[mStringList.size()];
                 stringArray = mStringList.toArray(stringArray);
                 userNameSelected=stringArray[position];
-                Intent intentHomeFeed = new Intent(getApplicationContext(), HomeFeed.class);
-                intentHomeFeed.putExtra("goToHomeFeed", userNameSelected);
-                intentHomeFeed.putExtra("skinTypeDisplay", storedSkinType);
                 //SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 //SharedPreferences.Editor editor = sharedPreferences.edit();
                 //editor.putString("goToHomeFeed", userNameSelected);
                 //editor.putString("skinTypeDisplay", storedSkinType);
                 //editor.commit();
+
+                Intent intentHomeFeed = new Intent(getApplicationContext(), HomeFeed.class);
+                intentHomeFeed.putExtra("goToHomeFeed", userNameSelected);
+                intentHomeFeed.putExtra("skinTypeDisplay", storedSkinType);
                 startActivity(intentHomeFeed);
 
             }
@@ -108,7 +103,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
                 else{
                     //SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                     //SharedPreferences.Editor editor = sharedPreferences.edit();
-                    //editor.putString(Name, userNameInput);
+                    //editor.putString("goToHomeFeedName", userNameInput);
                     //editor.commit();
                     Intent intent=new Intent(getApplicationContext(), indexPage.class);
                     intent.putExtra("userName",userNameInput);

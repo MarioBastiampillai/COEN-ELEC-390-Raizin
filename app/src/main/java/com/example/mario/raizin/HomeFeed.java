@@ -148,10 +148,11 @@ public class HomeFeed extends AppCompatActivity{
         welcomeMessage=findViewById(R.id.welcomeName);
         skinTypeDisplayObject=findViewById(R.id.skinTypeDisplay);
 
-        //SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        //String nameGiven=sharedPreferences.getString("nameKey", null);
+        //sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        //String nameGiven=sharedPreferences.getString("goToHomeFeedName", null);
         //String nameGivenFromLogin=sharedPreferences.getString("goToHomeFeed", null);
         //String skinTypeGivenFromLogin=sharedPreferences.getString("skinTypeDisplay", null);
+
         Intent getName=getIntent();
         String nameGiven=getName.getStringExtra("passedNameToDeviceList");
         Intent getNameFromLogin=getIntent();
