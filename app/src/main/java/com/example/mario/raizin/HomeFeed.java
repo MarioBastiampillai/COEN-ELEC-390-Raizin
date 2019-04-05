@@ -96,6 +96,7 @@ public class HomeFeed extends AppCompatActivity{
     public static final String selectedName="selectedNameKey";
     public static final String SkinType="skinTypeKey";
     Button stopTimerButton;
+    String skinTypeGet;
 
 
     /*@Override
@@ -171,7 +172,7 @@ public class HomeFeed extends AppCompatActivity{
             skinTypeDisplayObject.setText(skinTypeGivenFromLogin);
         }
         Intent skinTypeIntent=getIntent();
-        String skinTypeGet=skinTypeIntent.getStringExtra("SCORE_TRACK");
+        currentScoreTrack=skinTypeIntent.getIntExtra("SCORE_TRACK",0);
         if (currentScoreTrack >= 0 && currentScoreTrack < 8){
             skinTypeGet = "Skin Type 1";
         }
