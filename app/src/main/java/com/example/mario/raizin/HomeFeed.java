@@ -230,7 +230,7 @@ public class HomeFeed extends AppCompatActivity {
 
 
     }
-
+//comment
 //    //private EmulatorView mEmulatorView;
 //    Runnable updateView = new Runnable() {
 //        @Override
