@@ -17,6 +17,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -30,8 +31,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NotificationManagerCompat;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
@@ -63,7 +80,11 @@ public class HomeFeed extends AppCompatActivity {
     private TextView timeOutsideTimerTextView;
     private TextView timeUntilReapplyTextView;
     public TextView UVDisplayObject;
-
+    //facebook
+    private TextView info;
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
+    //facebook
     private CountDownTimer countdownTimer;
     private long timeLeftInMilliReapply; //SET this variable with max timer time
     private long timeLeftInMilliTimeOutside; //set this variable with time outside
@@ -113,21 +134,53 @@ public class HomeFeed extends AppCompatActivity {
         setContentView(R.layout.activity_home_feed);
         createNotificationChannel();
 
+//login facebook button
+        loginButton = findViewById(R.id.login_button);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        callbackManager = CallbackManager.Factory.create();
+
+        info = (TextView) findViewById(R.id.info);
+
+        loginButton = (LoginButton)findViewById(R.id.login_button);
+
+        checkLoginStatus();
+        // loginButton.setReadPermissions(Arrays.asList("info"));
+
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+// facebook
+
         //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
         uvButton = (Button) findViewById(R.id.uvButton);
         UVDisplayObject = (TextView) findViewById(R.id.UVDisplay);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButtonID);
         warningTextView = findViewById(R.id.warningTextView);
-        if(measuredUVIndex >= 8)
+        if (measuredUVIndex >= 8)
             warningTextView.setVisibility(View.VISIBLE);
-        else{
+        else {
             warningTextView.setVisibility(View.INVISIBLE);
         }
 
         countDownText = findViewById(R.id.countdown_text);
         timeUntilReapplyTextView = findViewById(R.id.timeUntilReapplyTextView);
         stopTimerButton = findViewById(R.id.stopTimerButton);
-        if(!timerRunning){
+        if (!timerRunning) {
             stopTimerButton.setVisibility(View.GONE);
         }
 
@@ -193,13 +246,12 @@ public class HomeFeed extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(timerRunning)
-                    Toast.makeText(getApplicationContext(),"You must stop the current timer before you can set another one.",Toast.LENGTH_SHORT).show();
-                else{
-                    if(measuredUVIndex == -1){
-                        Toast.makeText(getApplicationContext(),"You must measure the UV index before setting a Timer", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
+                if (timerRunning)
+                    Toast.makeText(getApplicationContext(), "You must stop the current timer before you can set another one.", Toast.LENGTH_SHORT).show();
+                else {
+                    if (measuredUVIndex == -1) {
+                        Toast.makeText(getApplicationContext(), "You must measure the UV index before setting a Timer", Toast.LENGTH_SHORT).show();
+                    } else {
                         Disconnect();
                         Intent intent = new Intent(getApplicationContext(), Timer.class);
                         startActivity(intent);
@@ -209,9 +261,10 @@ public class HomeFeed extends AppCompatActivity {
         });
         //new ConnectBT().execute();
 
-        try{
+        try {
             connectBluetoothDevice();
-        }catch(Exception exception){}
+        } catch (Exception exception) {
+        }
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "tag:");
@@ -221,6 +274,75 @@ public class HomeFeed extends AppCompatActivity {
 
 
     }
+
+    //facebook
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        callbackManager.onActivityResult(requestCode,  resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    AccessTokenTracker tokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
+        {
+            if(currentAccessToken==null)
+            {
+//                txtName.setText("");
+//                txtEmail.setText("");
+//                circleImageView.setImageResource(0);
+//                Toast.makeText(MainActivity.this,"User Logged out",Toast.LENGTH_LONG).show();
+            }
+            else
+                loaduserProfile(currentAccessToken);
+
+        }
+    };
+
+    private void loaduserProfile(AccessToken newAccessToken) {
+
+        GraphRequest request = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                try {
+                    String first_name = object.getString("first_name");
+                    String last_name = object.getString("last_name");
+                    String email = object.getString("email");
+                    String id = object.getString("id");
+                    String image_url = "https://graph.facebook.com/"+id+ "/picture?type=normal";
+
+
+//                    txtEmail.setText(email);
+                    info.setText(first_name + " " +last_name);
+
+//                    Glide.with(MainActivity.this).load(image_url).into(circleImageView);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields","first_name,last_name,email,id");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+    }
+
+    private void checkLoginStatus()
+    {
+        if(AccessToken.getCurrentAccessToken()!=null)
+        {
+            loaduserProfile(AccessToken.getCurrentAccessToken());
+        }
+    }
+
+//facebook
+
+
+
 
     //public EmulatorView mEmulatorView;
     Runnable updateView = new Runnable() {
@@ -368,9 +490,9 @@ public class HomeFeed extends AppCompatActivity {
 
 
     public void TimerSetup(String timer, int time){
-            timeLeftInMilliReapply = time;
-            startTimer(timer);
-            timeUntilReapplyTextView.setText("Time until next Reapply:");
+        timeLeftInMilliReapply = time;
+        startTimer(timer);
+        timeUntilReapplyTextView.setText("Time until next Reapply:");
     }
 
     //Android documentation https://developer.android.com/training/notify-user/build-notification
@@ -404,9 +526,9 @@ public class HomeFeed extends AppCompatActivity {
 
     //Handler viewHandler = new Handler();
     //public EmulatorView mEmulatorView;
-        //Runnable updateView = new Runnable() {
-            //@Override
-            //public void run() {
+    //Runnable updateView = new Runnable() {
+    //@Override
+    //public void run() {
     private void Disconnect() {
         if (btSocket != null) //If the btSocket is busy
         {

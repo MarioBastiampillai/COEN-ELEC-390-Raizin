@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mario.raizin">
 
@@ -7,39 +6,57 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <application android:hardwareAccelerated="true"
+    <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DeviceList"/>
-        <activity android:name=".userPersonalization"></activity>
-        <activity android:name=".indexPage"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".DeviceList" />
+        <activity android:name=".userPersonalization" />
+        <activity
+            android:name=".indexPage"
+            android:screenOrientation="portrait" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--//facebook-->
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name"/>
+        <!--//facebook-->
+
         <activity
             android:name=".HomeFeed"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".DeviceList" />
+            android:parentActivityName=".DeviceList"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GeneralInformationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".TimeOutsideActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Timer"
-            android:parentActivityName=".TimeOutsideActivity"/>
-        <activity android:name=".CustomTimer"
-            android:parentActivityName=".Timer"/>
+        <activity
+            android:name=".Timer"
+            android:parentActivityName=".TimeOutsideActivity" />
+        <activity
+            android:name=".CustomTimer"
+            android:parentActivityName=".Timer" />
+<!--//facebook-->
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+<!--//facebook-->
     </application>
 
 </manifest>

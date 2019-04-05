@@ -2,6 +2,11 @@
     <string name="app_name">Raizin</string>
 
     <!--GENETIC DISPOSITION ANSWERS-->
+
+    <!--//facebook-->
+    <string name="facebook_app_id">498012024065361</string>
+    <!--//facebook-->
+
     <string-array name="GDone">
         <item>...</item>
         <item>Light blue, Gray, Green</item>
