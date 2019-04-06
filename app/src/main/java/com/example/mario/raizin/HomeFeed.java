@@ -146,7 +146,7 @@ public class HomeFeed extends AppCompatActivity{
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        welcomeMessage=findViewById(R.id.welcomeName);
+        welcomeMessage=(TextView)findViewById(R.id.textView4);
         skinTypeDisplayObject=findViewById(R.id.skinTypeDisplay);
 
         //sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -547,7 +547,7 @@ public class HomeFeed extends AppCompatActivity{
     /*@Override
     public void onBackPressed() {
         //do nothing
-    }
+    }*/
 
     @Override
     public void onResume(){
