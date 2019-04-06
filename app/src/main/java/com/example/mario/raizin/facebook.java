@@ -74,7 +74,9 @@ public class facebook extends AppCompatActivity {
 
         shareDialog = new ShareDialog(this);
 
-        final Target target = new Target() {
+        checkLoginStatus();
+
+        Target target = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 
@@ -82,7 +84,8 @@ public class facebook extends AppCompatActivity {
                         .setBitmap(bitmap)
                         .build();
 
-                if(ShareDialog.canShow(SharePhotoContent.class)){
+                if(ShareDialog.canShow(SharePhotoContent.class))
+                {
 
                     SharePhotoContent content = new SharePhotoContent.Builder()
                             .addPhoto(sharePhoto)
@@ -176,10 +179,15 @@ public class facebook extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
                 shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
                     @Override
                     public void onSuccess(Sharer.Result result) {
                         Toast.makeText( facebook.this, "Share successful", Toast.LENGTH_SHORT).show();
+
+                Picasso.with(getBaseContext())
+                        .load("https://www.freepik.com/free-photos-vectors/png-image")
+                        .into(target);
 
                     }
 
@@ -195,10 +203,6 @@ public class facebook extends AppCompatActivity {
 
                     }
                 });
-
-                Picasso.with(getBaseContext())
-                        .load("https://www.freepik.com/free-photos-vectors/png-image")
-                        .into(target);
 
             }
         });

@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.534"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="103dp" />
+        tools:layout_editor_absoluteX="115dp" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
