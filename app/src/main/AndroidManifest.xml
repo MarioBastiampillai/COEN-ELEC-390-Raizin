@@ -32,8 +32,8 @@
         </activity>
         <activity
             android:name=".HomeFeed"
-            android:parentActivityName=".DeviceList"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".GeneralInformationActivity"
             android:screenOrientation="portrait" />
@@ -46,6 +46,7 @@
         <activity
             android:name=".CustomTimer"
             android:parentActivityName=".Timer" />
+        <activity android:name=".LoginorSignUpActivity"></activity>
     </application>
 
 </manifest>

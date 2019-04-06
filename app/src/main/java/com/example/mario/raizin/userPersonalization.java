@@ -117,6 +117,8 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
         validationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent3=getIntent();
+                String passedNameString=intent3.getStringExtra("passedName");
                 int sScore1 = (int) GDspinner1.getSelectedItemId();
                 int sScore2 = (int) GDspinner2.getSelectedItemId();
                 int sScore3 = (int) GDspinner3.getSelectedItemId();
@@ -146,6 +148,7 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
 
                     Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
                     intent.putExtra("SCORE_TRACK", scoreTrack);
+                    intent.putExtra("passedNameToDeviceList", passedNameString);
                     startActivity(intent);
                     //currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0); INSIDE THE HOMEFEED PAGE
                 }
