@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,9 +18,17 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,7 +44,9 @@ import java.io.InputStream;
 import java.util.Set;
 import java.util.UUID;
 
-public class HomeFeed extends AppCompatActivity {
+
+
+public class HomeFeed extends AppCompatActivity{
 
     PowerManager.WakeLock wakeLock;
 
@@ -63,6 +74,7 @@ public class HomeFeed extends AppCompatActivity {
     private TextView timeOutsideTimerTextView;
     private TextView timeUntilReapplyTextView;
     public TextView UVDisplayObject;
+    public TextView welcomeMessage;
 
     private CountDownTimer countDownTimer;
     private long timeLeftInMilliReapply; //SET this variable with max timer time
@@ -76,16 +88,36 @@ public class HomeFeed extends AppCompatActivity {
     //String fitzpatrickType = null;
     int currentScoreTrack;
     FloatingActionButton floatingActionButton;
+    public TextView skinTypeDisplayObject;
+    private DrawerLayout drawer;
+    SharedPreferences sharedPreferences;                //creation of a SharedPreference object to be used to input data
+    public static final String MyPREFERENCES="MyPrefs";
+    public static final String Name="nameKey";
+    public static final String selectedName="selectedNameKey";
+    public static final String SkinType="skinTypeKey";
     Button stopTimerButton;
+    String skinTypeGet;
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.example_menu, menu);
         return true;
-    }
+    }*/
 
+
+    @Override
+    public void onBackPressed()
+    {
+        if(drawer.isDrawerOpen(GravityCompat.START))
+        {
+            drawer.closeDrawer(GravityCompat.START);
+        }else{
+            super.onBackPressed();
+        }
+
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -100,18 +132,102 @@ public class HomeFeed extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-//    @Override
-//    protected void onStart()
-//    {
-//        super.onStart();
-//        viewHandler.post(updateView);
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_feed);
+        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbarId);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        drawer=findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        welcomeMessage=findViewById(R.id.welcomeName);
+        skinTypeDisplayObject=findViewById(R.id.skinTypeDisplay);
+
+        //sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        //String nameGiven=sharedPreferences.getString("goToHomeFeedName", null);
+        //String nameGivenFromLogin=sharedPreferences.getString("goToHomeFeed", null);
+        //String skinTypeGivenFromLogin=sharedPreferences.getString("skinTypeDisplay", null);
+
+        Intent getName=getIntent();
+        String nameGiven=getName.getStringExtra("passedNameToDeviceList");
+        Intent getNameFromLogin=getIntent();
+        String nameGivenFromLogin=getNameFromLogin.getStringExtra("goToHomeFeed");
+        Intent getSkinTypeFromLogin=getIntent();
+        String skinTypeGivenFromLogin=getSkinTypeFromLogin.getStringExtra("skinTypeDisplay");
+        if(!TextUtils.isEmpty(nameGivenFromLogin))
+        {
+            welcomeMessage.setText("Welcome, "+nameGivenFromLogin);
+        }
+        else{
+            welcomeMessage.setText("Welcome, "+nameGiven);  //was nameGiven
+        }
+        if(!TextUtils.isEmpty(skinTypeGivenFromLogin))
+        {
+            skinTypeDisplayObject.setText(skinTypeGivenFromLogin);
+        }
+        Intent skinTypeIntent=getIntent();
+        currentScoreTrack=skinTypeIntent.getIntExtra("SCORE_TRACK",0);
+        if (currentScoreTrack >= 0 && currentScoreTrack < 8){
+            skinTypeGet = "Skin Type 1";
+        }
+        if (currentScoreTrack >= 8 && currentScoreTrack < 17){
+            skinTypeGet = "Skin Type 2";
+        }
+        if (currentScoreTrack >= 17 && currentScoreTrack < 25){
+            skinTypeGet = "Skin Type 3";
+        }
+        if (currentScoreTrack >= 25 && currentScoreTrack < 30){
+            skinTypeGet = "Skin Type 4";
+        }
+        if (currentScoreTrack >= 30){
+            skinTypeGet = "Skin Type V and VI";
+        }
+        skinTypeDisplayObject.setText(skinTypeGet);
+
+
+        sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(selectedName, nameGivenFromLogin);
+        editor.putString(Name, nameGiven);  //was nameGiven
+        editor.putString(SkinType, skinTypeGet);
+        editor.commit();
+
+        NavigationView navigationView=findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        int id = menuItem.getItemId();
+                        switch (id) {
+                            case R.id.nav_information:    //was navigation_item_1
+                                //Do some thing here
+                                // add navigation drawer item onclick method here
+                                Intent intent1 = getIntent();
+                                currentScoreTrack = intent1.getIntExtra("SCORE_TRACK", 0);
+                                Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
+                                intent.putExtra("SCORE_TRACK", currentScoreTrack);
+                                startActivity(intent);
+                                break;
+                            case R.id.nav_logout:
+                                Intent intentLoginorSignUpActivity = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
+                                startActivity(intentLoginorSignUpActivity);
+                        }
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        drawer.closeDrawers();
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        return true;
+                    }
+                });
+
         createNotificationChannel();
 
         //timeOutsideButton=(Button)findViewById(R.id.timeOutsideButtonID);
@@ -428,7 +544,7 @@ public class HomeFeed extends AppCompatActivity {
 //        }
 //    }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         //do nothing
     }

@@ -19,10 +19,11 @@ public class indexPage extends AppCompatActivity {
         setUpProfileBtnObject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                Intent intent = new Intent(getApplicationContext(), userPersonalization.class);
-                startActivity(intent);
+                Intent intent1=getIntent();
+                String userNameString=intent1.getStringExtra("userName");
+                Intent intent2 = new Intent(getApplicationContext(), userPersonalization.class);
+                intent2.putExtra("passedName", userNameString);
+                startActivity(intent2);
 
             }
         });
