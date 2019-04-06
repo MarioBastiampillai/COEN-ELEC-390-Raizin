@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".facebook"></activity>
+        <activity android:name=".facebook" />
         <activity android:name=".UVDisplay" />
         <activity android:name=".DeviceList" />
         <activity android:name=".userPersonalization" />
@@ -34,8 +34,7 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- //facebook -->
+            android:label="@string/app_name" /> <!-- //facebook -->
         <activity
             android:name=".HomeFeed"
             android:parentActivityName=".DeviceList"
@@ -52,9 +51,14 @@
         <activity
             android:name=".CustomTimer"
             android:parentActivityName=".Timer" /> <!-- //facebook -->
+        <provider
+            android:authorities="com.facebook.app.FacebookContentProvider498012024065361"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="123456908761030" />
+            android:value="@string/facebook_app_id" />
     </application>
 
 </manifest>

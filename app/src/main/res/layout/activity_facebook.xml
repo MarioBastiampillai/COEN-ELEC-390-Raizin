@@ -31,7 +31,32 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="112dp"
-        tools:layout_editor_absoluteY="166dp" />
+        tools:layout_editor_absoluteX="92dp"
+        tools:layout_editor_absoluteY="282dp" />
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints,UselessLeaf"></LinearLayout>
+
+    <Button
+        android:id="@+id/button_share_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Share link"
+        tools:ignore="MissingConstraints,UselessLeaf"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="311dp" />
+
+    <Button
+        android:id="@+id/button_share_Photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Share Photo"
+        tools:ignore="MissingConstraints,UselessLeaf"
+        tools:layout_editor_absoluteX="51dp"
+        tools:layout_editor_absoluteY="364dp" />
 
 </android.support.constraint.ConstraintLayout>

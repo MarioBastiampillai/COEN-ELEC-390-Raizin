@@ -31,6 +31,7 @@ public class facebook extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_facebook);
 
 
@@ -38,11 +39,8 @@ public class facebook extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
-
         callbackManager = CallbackManager.Factory.create();
-
         info = (TextView) findViewById(R.id.info);
-
         loginButton = (LoginButton)findViewById(R.id.login_button);
 
 //        checkLoginStatus();
@@ -143,5 +141,9 @@ public class facebook extends AppCompatActivity {
     }
 
 //facebook
+//facebook share
+
+
+
 
 }
