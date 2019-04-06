@@ -30,33 +30,48 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.534"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="92dp"
-        tools:layout_editor_absoluteY="282dp" />
+        tools:layout_editor_absoluteX="103dp" />
 
-        <LinearLayout
-            android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:ignore="MissingConstraints,UselessLeaf"></LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints,UselessLeaf"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp"></LinearLayout>
 
     <Button
         android:id="@+id/button_share_link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Share link"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.595"
         tools:ignore="MissingConstraints,UselessLeaf"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="311dp" />
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/button_share_Photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Share Photo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.679"
         tools:ignore="MissingConstraints,UselessLeaf"
-        tools:layout_editor_absoluteX="51dp"
-        tools:layout_editor_absoluteY="364dp" />
+        tools:layout_editor_absoluteX="16dp" />
 
 </android.support.constraint.ConstraintLayout>

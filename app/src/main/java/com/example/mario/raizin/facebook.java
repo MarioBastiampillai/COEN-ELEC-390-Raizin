@@ -1,9 +1,16 @@
 package com.example.mario.raizin;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -14,6 +21,14 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,11 +36,21 @@ import org.json.JSONObject;
 public class facebook extends AppCompatActivity {
 
 
-    //facebook
+    //facebook login
     private TextView info;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
-    //facebook
+    //facebook login
+
+    //facebook share link, share photo
+
+    Button button_share_link, button_share_Photo;
+    ShareDialog shareDialog;
+    private Object view;
+
+    //facebook share link, share photo
+
+
 
 
     @Override
@@ -38,13 +63,47 @@ public class facebook extends AppCompatActivity {
         //login facebook button
         loginButton = findViewById(R.id.login_button);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        info = (TextView) findViewById(R.id.info);
-        loginButton = (LoginButton)findViewById(R.id.login_button);
+        //share link button
+        button_share_link = (Button)findViewById(R.id.button_share_link);
 
-//        checkLoginStatus();
-        // loginButton.setReadPermissions(Arrays.asList("info"));
+        //share photo button
+        button_share_Photo = findViewById(R.id.button_share_Photo);
+
+        // initializing facebook
+        callbackManager = CallbackManager.Factory.create();
+
+        shareDialog = new ShareDialog(this);
+
+        final Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+                SharePhoto sharePhoto = new SharePhoto.Builder()
+                        .setBitmap(bitmap)
+                        .build();
+
+                if(ShareDialog.canShow(SharePhotoContent.class)){
+
+                    SharePhotoContent content = new SharePhotoContent.Builder()
+                            .addPhoto(sharePhoto)
+                            .build();
+                    shareDialog.show(content);
+                }
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+
+
+        info = (TextView) findViewById(R.id.info);
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -72,11 +131,86 @@ public class facebook extends AppCompatActivity {
             }
         });
 // facebook
+//facebook share
+
+        //for sharing the link
+        button_share_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+                    @Override
+                    public void onSuccess(Sharer.Result result) {
+                        Toast.makeText( facebook.this, "Share successful", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText( facebook.this, "Share cancel", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Toast.makeText( facebook.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                            .setQuote("this is useful link")
+                            .setContentUrl(Uri.parse("http://youtube.com"))
+                            .build();
+                    if(ShareDialog.canShow(ShareLinkContent.class)){
+
+                        shareDialog.show(linkContent);
+                    }
+
+
+            }
+        });
+
+        //for sharing the photo
+        button_share_Photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+                    @Override
+                    public void onSuccess(Sharer.Result result) {
+                        Toast.makeText( facebook.this, "Share successful", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText( facebook.this, "Share cancel", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Toast.makeText( facebook.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                Picasso.with(getBaseContext())
+                        .load("https://www.freepik.com/free-photos-vectors/png-image")
+                        .into(target);
+
+            }
+        });
+
 
     }
 
 
-    //facebook
+//facebook share
+
+
+    //facebook login
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,  resultCode, data);
@@ -140,10 +274,7 @@ public class facebook extends AppCompatActivity {
         }
     }
 
-//facebook
-//facebook share
-
-
+//facebook login
 
 
 }
