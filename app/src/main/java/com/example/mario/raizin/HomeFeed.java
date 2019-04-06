@@ -51,7 +51,7 @@ public class HomeFeed extends AppCompatActivity {
     String bluetoothDeviceName = null;
     Button uvButton;
 //    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    double measuredUVIndex = 1;
+    double measuredUVIndex = -1;
 //    String bluetoothSerial = null;
 //    InputStream in;
 //    private boolean isBtConnected = false;
