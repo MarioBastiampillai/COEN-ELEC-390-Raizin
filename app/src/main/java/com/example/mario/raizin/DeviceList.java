@@ -53,6 +53,7 @@ public class DeviceList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pairedDevicesList();  //was pairedDevicesList();
+                btnPaired.setVisibility(View.INVISIBLE);
                 //Intent i = new Intent(getApplicationContext(), UVDisplay.class);
                 //Intent intent4=getIntent();
                 //String passedNameToDeviceListString=intent4.getStringExtra("passedNameToDeviceList");
