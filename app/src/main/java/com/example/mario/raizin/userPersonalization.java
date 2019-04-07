@@ -35,8 +35,10 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
 
     int scoreTrack = 0;
 
+    SharedPreferences sharedPreferences;
+
     public void skinTypeDetermination (int currentScoreTrack){
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         String fitzpatrickType = "N/A";
         String gii1 = "N/A";
@@ -137,6 +139,8 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_personalization);
+
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         // SPINNER 1 - GDSPINNER1
         GDspinner1 = findViewById(R.id.spinner1);
@@ -240,6 +244,8 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
                     Toast.makeText(getApplicationContext(), String.valueOf(scoreTrack), Toast.LENGTH_SHORT).show();
 
                     skinTypeDetermination(scoreTrack);
+
+                    sharedPreferences.edit().putString("nameKey", getIntent().getStringExtra("nameKey")).apply();
 
                     Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
                     startActivity(intent);
