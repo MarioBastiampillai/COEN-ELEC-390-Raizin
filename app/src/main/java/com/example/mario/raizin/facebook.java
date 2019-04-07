@@ -3,8 +3,10 @@ package com.example.mario.raizin;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -33,6 +36,9 @@ import com.squareup.picasso.Target;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.provider.MediaStore;
+import java.io.IOException;
+
 public class facebook extends AppCompatActivity {
 
 
@@ -48,7 +54,38 @@ public class facebook extends AppCompatActivity {
     ShareDialog shareDialog;
     private Object view;
 
+    private int PICK_IMAGE_REQUEST = 1;
+
     //facebook share link, share photo
+
+  public Target target = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+            SharePhoto sharePhoto = new SharePhoto.Builder()
+                    .setBitmap(bitmap)
+                    .build();
+
+            if(ShareDialog.canShow(SharePhotoContent.class))
+            {
+
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(sharePhoto)
+                        .build();
+                shareDialog.show(content);
+            }
+      }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
 
 
 
@@ -76,41 +113,13 @@ public class facebook extends AppCompatActivity {
 
         checkLoginStatus();
 
-        Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-
-                SharePhoto sharePhoto = new SharePhoto.Builder()
-                        .setBitmap(bitmap)
-                        .build();
-
-                if(ShareDialog.canShow(SharePhotoContent.class))
-                {
-
-                    SharePhotoContent content = new SharePhotoContent.Builder()
-                            .addPhoto(sharePhoto)
-                            .build();
-                    shareDialog.show(content);
-                }
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        };
-
-
         info = (TextView) findViewById(R.id.info);
+
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(LoginResult loginResult)
+           {
                 info.setText(
                         "User ID: "
                                 + loginResult.getAccessToken().getUserId()
@@ -118,7 +127,6 @@ public class facebook extends AppCompatActivity {
                                 "Auth Token: "
                                 + loginResult.getAccessToken().getToken()
                 );
-
             }
 
             @Override
@@ -133,6 +141,7 @@ public class facebook extends AppCompatActivity {
 
             }
         });
+
 // facebook
 //facebook share
 
@@ -186,8 +195,9 @@ public class facebook extends AppCompatActivity {
                         Toast.makeText( facebook.this, "Share successful", Toast.LENGTH_SHORT).show();
 
                 Picasso.with(getBaseContext())
-                        .load("https://www.freepik.com/free-photos-vectors/png-image")
+                        .load(Uri.parse("http://www.myconfinedspace.com/2015/03/31/vector-batman/vector-batman-jpg/"))
                         .into(target);
+
 
                     }
 
@@ -208,7 +218,16 @@ public class facebook extends AppCompatActivity {
         });
 
 
+
     }
+
+    public void sharePhotos(View view) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
 
 
 //facebook share
@@ -217,26 +236,52 @@ public class facebook extends AppCompatActivity {
     //facebook login
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode,  resultCode, data);
-//        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+       if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+
+                Bitmap image = null;
+                try {
+                    image = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(image)
+                        .build();
+
+                if (ShareDialog.canShow(SharePhotoContent.class)) {
+                    SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+                            .addPhoto(photo)
+                            .build();
+
+                    shareDialog.show(sharePhotoContent);
+                }
+            }
+        }
     }
 
-//    AccessTokenTracker tokenTracker = new AccessTokenTracker() {
-//        @Override
-//        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
-//        {
-//            if(currentAccessToken==null)
-//            {
-////                txtName.setText("");
-////                txtEmail.setText("");
-////                circleImageView.setImageResource(0);
-////                Toast.makeText(MainActivity.this,"User Logged out",Toast.LENGTH_LONG).show();
-//            }
-//            else
-//                loaduserProfile(currentAccessToken);
-//
-//        }
-//    };
+ //  AccessTokenTracker tokenTracker = new AccessTokenTracker() {
+ //      @Override
+ //      protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
+ //      {
+ //          if(currentAccessToken==null)
+ //          {
+ //              txtName.setText("");
+ //              txtEmail.setText("");
+ //              circleImageView.setImageResource(0);
+ //              Toast.makeText(MainActivity.this,"User Logged out",Toast.LENGTH_LONG).show();
+ //          }
+ //          else
+ //              loaduserProfile(currentAccessToken);
+
+ //      }
+ //};
+
+
 
     private void loaduserProfile(AccessToken newAccessToken) {
 
