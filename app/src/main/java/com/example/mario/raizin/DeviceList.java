@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ public class DeviceList extends AppCompatActivity {
     ListView devicelist;
     SharedPreferences myPrefs;
 
+    ImageView bluetoothl;
     private BluetoothAdapter myBluetooth = null;
     private Set<BluetoothDevice> pairedDevices;
     public static String EXTRA_ADDRESS = "device_address";
@@ -35,10 +37,11 @@ public class DeviceList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
 
-        myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
+        //myPrefs = getSharedPreferences("prefID", Context.MODE_PRIVATE);
 
         btnPaired = (Button) findViewById(R.id.button);
         devicelist = (ListView) findViewById(R.id.listView);
+        bluetoothl = (ImageView)  findViewById(R.id.bluetoothlogo);
 
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
         if ( myBluetooth==null ) {
@@ -52,7 +55,14 @@ public class DeviceList extends AppCompatActivity {
         btnPaired.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pairedDevicesList();
+                pairedDevicesList();  //was pairedDevicesList();
+                btnPaired.setVisibility(View.INVISIBLE);
+                //Intent i = new Intent(getApplicationContext(), UVDisplay.class);
+                //Intent intent4=getIntent();
+                //String passedNameToDeviceListString=intent4.getStringExtra("passedNameToDeviceList");
+                //i.putExtra("passedNameToDeviceList", passedNameToDeviceListString);
+                //myPrefs.edit().putString("device_add", address).apply();
+                //startActivity(i);
             }
         });
     }
@@ -80,12 +90,13 @@ public class DeviceList extends AppCompatActivity {
             String info = ((TextView) view).getText().toString();
             String address = info.substring(info.length()-17);// gets bluetooth address
 
-            Intent i = new Intent(getApplicationContext(), HomeFeed.class);
+            Intent i = new Intent(getApplicationContext(), UVDisplay.class);
             i.putExtra(EXTRA_ADDRESS, address);
             deviceScoreTrack = i.getIntExtra("SCORE_TRACK", 0);
             i.putExtra("SCORE_TRACK", deviceScoreTrack);
-
-
+            Intent intent4=getIntent();
+            String passedNameToDeviceListString=intent4.getStringExtra("passedNameToDeviceList");
+            i.putExtra("passedNameToDeviceList", passedNameToDeviceListString);
             //myPrefs.edit().putString("device_add", address).apply();
             startActivity(i);
         }

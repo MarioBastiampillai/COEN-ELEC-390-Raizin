@@ -1,7 +1,9 @@
 package com.example.mario.raizin;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +20,9 @@ public class GeneralInformationActivity extends AppCompatActivity {
     String gii2 = null;
     String gii3 = null;
     String link = null;
+    SharedPreferences sharedPreferences;
+
+    String fitzpatrickType = "";
 
 
     @Override
@@ -110,6 +115,10 @@ public class GeneralInformationActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_general_information);
+        TextView textView = (TextView) findViewById(R.id.textViewName);
+
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        fitzpatrickType = sharedPreferences.getString("skinTypeKey", "N/A");
 
         TextView textView = findViewById(R.id.fitzDisplay);
         textView.setText("Per the fitzpatrick scale you are of the " + fitzpatrickType);
