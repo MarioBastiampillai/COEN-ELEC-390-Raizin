@@ -1,18 +1,16 @@
 package com.example.mario.raizin;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.AdapterView;
 import android.widget.Toast;
-
-
-
 
 //public abstract class userPersonalization extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 public class userPersonalization extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -36,6 +34,30 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
     Button validationBtn;
 
     int scoreTrack = 0;
+
+    public void skinTypeDetermination (int currentScoreTrack){
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        String fitzpatrickType = "N/A";
+        if (currentScoreTrack >= 0 && currentScoreTrack < 8){
+            fitzpatrickType = "Type 1";
+        }
+        if (currentScoreTrack >= 8 && currentScoreTrack < 17){
+            fitzpatrickType = "Type 2";
+        }
+        if (currentScoreTrack >= 17 && currentScoreTrack < 25){
+            fitzpatrickType = "Type 3";
+        }
+        if (currentScoreTrack >= 25 && currentScoreTrack < 30){
+            fitzpatrickType = "Type 4";
+        }
+        if (currentScoreTrack >= 30){
+            fitzpatrickType = "Type V and VI";
+        }
+
+        sharedPreferences.edit().putInt("scoreKey", currentScoreTrack).apply();
+        sharedPreferences.edit().putString("skinTypeKey", fitzpatrickType).apply();
+    }
 
 
     @Override
@@ -144,10 +166,10 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
 
                     Toast.makeText(getApplicationContext(), String.valueOf(scoreTrack), Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-                    intent.putExtra("SCORE_TRACK", scoreTrack);
+                    skinTypeDetermination(scoreTrack);
+
+                    Intent intent = new Intent(getApplicationContext(), HomeFeed.class);
                     startActivity(intent);
-                    //currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0); INSIDE THE HOMEFEED PAGE
                 }
             }
         });
