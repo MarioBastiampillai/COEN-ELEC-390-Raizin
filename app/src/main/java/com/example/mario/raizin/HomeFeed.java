@@ -53,7 +53,6 @@ public class HomeFeed extends AppCompatActivity{
     Button stopTimerButton;
     String skinTypeGet;
 
-
     @Override
     public void onBackPressed()
     {

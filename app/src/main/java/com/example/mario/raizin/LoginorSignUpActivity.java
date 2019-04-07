@@ -82,7 +82,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
                 }
                 else{
                     Intent intent=new Intent(getApplicationContext(), indexPage.class);
-                    sharedPreferences.edit().putString("nameKey", userNameInput).apply();
+                    intent.putExtra("nameKey", userNameInput);
                     startActivity(intent);
                 }
 

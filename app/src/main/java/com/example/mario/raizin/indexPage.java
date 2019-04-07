@@ -20,6 +20,7 @@ public class indexPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), userPersonalization.class);
+                intent.putExtra("nameKey", getIntent().getStringExtra("nameKey"));
                 startActivity(intent);
 
             }
