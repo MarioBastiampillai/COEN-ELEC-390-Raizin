@@ -39,24 +39,97 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         String fitzpatrickType = "N/A";
+        String gii1 = "N/A";
+        String gii2 = "N/A";
+        String gii3 = "N/A";
+        String link = "N/A";
+        String buttonTxt = "N/A";
         if (currentScoreTrack >= 0 && currentScoreTrack < 8){
             fitzpatrickType = "Type 1";
+            link = "https://www.amazon.ca/Banana-Boat-Performance-Ultra-Lightweight-Sunscreen/dp/B01BM5UKQU/" +
+                    "ref=sr_1_6?keywords=spf+30&qid=1554603584&refinements=p_72%3A11192170011&rnid=11192166011&s=gateway&sr=8-6";
+
+            gii1 = "This skin type is believed to be highly susceptible to premature ageing and skin cancers " +
+                    "and one is therefore advised to take extreme care, " +
+                    "use sunscreen and protect yourself from harmful UV rays as extreme sun exposure can result in serious damage";
+
+            gii2 = "Individuals with this skin type should stay out of the sun during the peak hours of 10am - 4pm," +
+                    "wear a high SPF 30 sunscreen every day and re apply it at lunchtime";
+
+            gii3 = "Wear sunglasses that provide UVA protection as UVA exposure can cause cataracts. " +
+                    "Tanning beds and booth are prohibited and contraindicated at all times as they have a high intensity of UV output ";
+            buttonTxt = "Shop for SPF 30!";
         }
         if (currentScoreTrack >= 8 && currentScoreTrack < 17){
             fitzpatrickType = "Type 2";
+            link = "https://www.amazon.ca/Banana-Boat-Performance-Ultra-Lightweight-Sunscreen/dp/B01BM5UKQU/" +
+                    "ref=sr_1_6?keywords=spf+30&qid=1554603584&refinements=p_72%3A11192170011&rnid=11192166011&s=gateway&sr=8-6";
+
+            gii1 = "This skin type manage to get a light tan with repeated exposure to sun." +
+                    " These skin types are therefore advised to take extreme care, " +
+                    "use sunscreen and protect themselves from harmful UV rays as extreme sun exposure can result in serious damage";
+
+            gii2 = "Individuals with this skin type should stay out of the sun during the peak hours of 10am - 4pm, " +
+                    "wear a high SPF 30 sunscreen every day and re apply it at lunchtime";
+
+            gii3 = "Wear sunglasses that provide UVA protection as UVA exposure can cause cataracts. " +
+                    "Avoid tanning beds and booth at all times as they have a high intensity of UV output";
+            buttonTxt = "Shop for SPF 30!";
+
         }
         if (currentScoreTrack >= 17 && currentScoreTrack < 25){
             fitzpatrickType = "Type 3";
+            link = "https://www.amazon.ca/Banana-Boat-Performance-Ultra-Lightweight-Sunscreen/dp/B01BM5UKQU/" +
+                    "ref=sr_1_6?keywords=spf+30&qid=1554603584&refinements=p_72%3A11192170011&rnid=11192166011&s=gateway&sr=8-6";
+
+            gii1 = "This skin sometimes burns and may tan to a light bronze." +
+                    "These skin types are therefore advised to take care, " +
+                    "use sunscreen and protect themselves from harmful UV rays as extreme sun exposure can result in serious damage";
+
+            gii2 = "Individuals with this skin type should stay out of the sun during the peak hours of 10am - 4pm, " +
+                    "wear a SPF 30 sunscreen every day and re apply it at lunchtime";
+
+            gii3 = "Wear sunglasses that provide UVA protection as UVA exposure can cause cataracts. " +
+                    "Avoid tanning beds and booth at all times as they have a high intensity of UV output";
+            buttonTxt = "Shop for SPF 30!";
+
         }
         if (currentScoreTrack >= 25 && currentScoreTrack < 30){
             fitzpatrickType = "Type 4";
+            link = "https://www.amazon.ca/Hawaiian-Tropic-Sheer-Sunscreen-Lotion/dp/B00BP2H6SG/ref=sr_1_5?keywords=spf+15&qid=1554603930&s=gateway&sr=8-5";
+
+            gii1 = "This skin type typically tan with ease and seldom get burned." +
+                    "They should still take care, use sunscreen and protect themselves from harmful UV rays as extreme sun exposure can result in serious damage, " +
+                    "uneven skin tone, premature ageing and possible skin cancers.";
+
+            gii2 = "Individuals with this skin type should stay out of the sun during the peak hours of 10am - 4pm, and wear a SPF 15 sunscreen every day.";
+
+            gii3 = "Wear sunglasses that provide UVA protection as UVA exposure can cause cataracts.";
+            buttonTxt = "Shop for SPF 15!";
+
         }
         if (currentScoreTrack >= 30){
             fitzpatrickType = "Type V and VI";
+            link = "https://www.amazon.ca/Hawaiian-Tropic-Sheer-Sunscreen-Lotion/dp/B00BP2H6SG/ref=sr_1_5?keywords=spf+15&qid=1554603930&s=gateway&sr=8-5";
+
+            gii1 = "This skin type tan easily and very rarely burn. " +
+                    "Individuals with this skin type should protect themselves from the sun as chronic sun exposure leads to uneven skin tone and pigmentation.";
+            gii2 = " Individuals with this skin type should stay out of the sun during the peak hours of 10am - 4pm, " +
+                    "and wear a SPF 15 to 30 sunscreen every day";
+
+            gii3 = "Wear sunglasses that provide UVA protection as UVA exposure can cause cataracts.";
+            buttonTxt = "Shop for SPF 15!";
+
         }
 
         sharedPreferences.edit().putInt("scoreKey", currentScoreTrack).apply();
         sharedPreferences.edit().putString("skinTypeKey", fitzpatrickType).apply();
+
+        sharedPreferences.edit().putString("gii1Key", gii1).apply();
+        sharedPreferences.edit().putString("gii2Key", gii2).apply();
+        sharedPreferences.edit().putString("gii3Key", gii3).apply();
+        sharedPreferences.edit().putString("linkKey", link).apply();
+        sharedPreferences.edit().putString("buttonTxtKey", buttonTxt).apply();
     }
 
 
