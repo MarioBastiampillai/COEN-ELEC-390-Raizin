@@ -17,20 +17,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static com.example.mario.raizin.HomeFeed.MyPREFERENCES;
-
 public class LoginorSignUpActivity extends AppCompatActivity {
 
     EditText editTextObject;
     Button buttonObject;
     ListView listViewObject;
-    String userNameSelected;
-    String storedSkinType;
+    // String userNameSelected;
     TextView startInstruction;
     TextView nextInstruction;
-    public static final String MyPREFERENCES="MyPrefs";
-    public static final String Name="nameKey";
-    public static final String selectedName="selectedNameKey";
     SharedPreferences sharedPreferences;
 
 
@@ -44,20 +38,12 @@ public class LoginorSignUpActivity extends AppCompatActivity {
         startInstruction=(TextView)findViewById(R.id.firstInstructionDisplay);
         nextInstruction=(TextView)findViewById(R.id.secondInstructionDisplay);
 
-        sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        String name=sharedPreferences.getString("nameKey", null);
-        String otherName=sharedPreferences.getString("selectedNameKey", null);
-        storedSkinType=sharedPreferences.getString("skinTypeKey", null);
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        String name = sharedPreferences.getString("nameKey", "");
 
-        if(!TextUtils.isEmpty(name)&&TextUtils.isEmpty(otherName))
-        {
+        if(!TextUtils.isEmpty(name)) {
             mStringList.add(name);
         }
-        else if(TextUtils.isEmpty(name)&&!TextUtils.isEmpty(otherName))
-        {
-            mStringList.add(otherName);
-        }
-
 
         String[] stringArray = new String[mStringList.size()];
         stringArray = mStringList.toArray(stringArray);
@@ -68,6 +54,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
         else{
             nextInstruction.setText("");
         }
+
         listViewObject = (ListView) findViewById(R.id.listViewId);
         ArrayAdapter arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_list, stringArray);
         listViewObject.setAdapter(arrayAdapter);
@@ -77,16 +64,9 @@ public class LoginorSignUpActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String[] stringArray = new String[mStringList.size()];
                 stringArray = mStringList.toArray(stringArray);
-                userNameSelected=stringArray[position];
-                //SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                //SharedPreferences.Editor editor = sharedPreferences.edit();
-                //editor.putString("goToHomeFeed", userNameSelected);
-                //editor.putString("skinTypeDisplay", storedSkinType);
-                //editor.commit();
+                // userNameSelected=stringArray[position];
 
                 Intent intentHomeFeed = new Intent(getApplicationContext(), HomeFeed.class);
-                intentHomeFeed.putExtra("goToHomeFeed", userNameSelected);
-                intentHomeFeed.putExtra("skinTypeDisplay", storedSkinType);
                 startActivity(intentHomeFeed);
 
             }
@@ -101,33 +81,10 @@ public class LoginorSignUpActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter a proper name", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                    //SharedPreferences.Editor editor = sharedPreferences.edit();
-                    //editor.putString("goToHomeFeedName", userNameInput);
-                    //editor.commit();
                     Intent intent=new Intent(getApplicationContext(), indexPage.class);
-                    intent.putExtra("userName",userNameInput);
+                    sharedPreferences.edit().putString("nameKey", userNameInput).apply();
                     startActivity(intent);
                 }
-                /*SharedPreferences sharedPreferences=getSharedPreferences(originalPreferences, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(originalName, userNameInput);
-                editor.commit();*/
-
-                //intent.putExtra("userName",userNameInput);
-                //String[] stringArray = new String[mStringList.size()];
-                //stringArray = mStringList.toArray(stringArray);
-                /*SharedPreferences sharedPreferences=getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(originalName, stringArray[0]);
-                editor.commit();*/
-
-                //put into sharedPreference in indexPage
-                //put the userNameInput into mStringList, sharedPreference
-                //check to see whether the string obtained from sharedPreference is empty or not
-                //if it is not empty, add it to mStringList
-                //check to see if the listview is empty or not
-                //if it is not empty take the econtents and add it into mStringList
 
             }
         });

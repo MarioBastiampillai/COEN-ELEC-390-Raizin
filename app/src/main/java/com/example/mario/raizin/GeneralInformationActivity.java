@@ -1,7 +1,9 @@
 package com.example.mario.raizin;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +14,9 @@ import android.widget.TextView;
 public class GeneralInformationActivity extends AppCompatActivity {
 
     Button shoppingButton;
+    SharedPreferences sharedPreferences;
 
-    String fitzpatrickType = null;
-    int currentScoreTrack;
+    String fitzpatrickType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,27 +26,11 @@ public class GeneralInformationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_general_information);
 
-        Intent intent = getIntent();
-        currentScoreTrack = intent.getIntExtra("SCORE_TRACK", 0);
-
-        if (currentScoreTrack >= 0 && currentScoreTrack < 8){
-            fitzpatrickType = "Type 1";
-        }
-        if (currentScoreTrack >= 8 && currentScoreTrack < 17){
-            fitzpatrickType = "Type 2";
-        }
-        if (currentScoreTrack >= 17 && currentScoreTrack < 25){
-            fitzpatrickType = "Type 3";
-        }
-        if (currentScoreTrack >= 25 && currentScoreTrack < 30){
-            fitzpatrickType = "Type 4";
-        }
-        if (currentScoreTrack >= 30){
-            fitzpatrickType = "Type V and VI";
-        }
-
         setContentView(R.layout.activity_general_information);
         TextView textView = (TextView) findViewById(R.id.textViewName);
+
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        fitzpatrickType = sharedPreferences.getString("skinTypeKey", "N/A");
         textView.setText("Per the fitzpatrick scale you are of the " + fitzpatrickType);
     }
 
