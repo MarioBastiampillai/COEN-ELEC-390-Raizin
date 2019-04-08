@@ -35,7 +35,7 @@ public class HomeFeed extends AppCompatActivity{
     PowerManager.WakeLock wakeLock;
 
     Button uvButton;
-    int measuredUVIndex = -1;
+    double measuredUVIndex = -1;
     private ProgressDialog progress;
 
     private TextView countDownText;
