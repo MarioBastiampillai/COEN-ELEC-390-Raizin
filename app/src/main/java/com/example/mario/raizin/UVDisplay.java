@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -37,6 +38,7 @@ public class UVDisplay extends AppCompatActivity {
     public TextView instruct;
     InputStream in;
 
+    ImageView sun1;
     Button Disconnect;
 
     @Override
@@ -50,6 +52,7 @@ public class UVDisplay extends AppCompatActivity {
         UVDisplayObject = (TextView) findViewById(R.id.RTUVdisplay);
         Disconnect = findViewById(R.id.button3);
         instruct = findViewById(R.id.textView22);
+        sun1 = (ImageView)  findViewById(R.id.sunlogo);
 
         //Connection to bluetooth
 //        try{
@@ -63,7 +66,10 @@ public class UVDisplay extends AppCompatActivity {
             public void onClick(View arg0) {
 
                 Disconnect();
+                //Intent intent=getIntent();
+                //String userNameString=intent.getStringExtra("passedNameToDeviceList");
                 Intent i = new Intent(getApplicationContext(), HomeFeed.class);
+                //i.putExtra("passedNameToDeviceList", userNameString);
                 startActivity(i);
             }
         });

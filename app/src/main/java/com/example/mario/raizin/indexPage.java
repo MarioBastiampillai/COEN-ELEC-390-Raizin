@@ -19,9 +19,8 @@ public class indexPage extends AppCompatActivity {
         setUpProfileBtnObject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Intent intent = new Intent(getApplicationContext(), userPersonalization.class);
+                intent.putExtra("nameKey", getIntent().getStringExtra("nameKey"));
                 startActivity(intent);
 
             }
