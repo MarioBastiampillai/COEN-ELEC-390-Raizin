@@ -141,12 +141,14 @@ public class HomeFeed extends AppCompatActivity{
                                 Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
                                 startActivity(intent);
                                 break;
-                            case R.id.nav_logout:
-                                Intent intentLoginorSignUpActivity = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
-                                startActivity(intentLoginorSignUpActivity);
                             case R.id.nav_shareToFacebook:
                                 Intent intentFacebook = new Intent(getApplicationContext(), facebook.class);
                                 startActivity(intentFacebook);
+                                break;
+                            case R.id.nav_logout:
+                                Intent intentLoginorSignUpActivity = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
+                                startActivity(intentLoginorSignUpActivity);
+                                break;
                         }
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
