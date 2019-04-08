@@ -58,34 +58,34 @@ public class facebook extends AppCompatActivity {
 
     //facebook share link, share photo
 
-  public Target target = new Target() {
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-
-            SharePhoto sharePhoto = new SharePhoto.Builder()
-                    .setBitmap(bitmap)
-                    .build();
-
-            if(ShareDialog.canShow(SharePhotoContent.class))
-            {
-
-                SharePhotoContent content = new SharePhotoContent.Builder()
-                        .addPhoto(sharePhoto)
-                        .build();
-                shareDialog.show(content);
-            }
-      }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-        }
-    };
+//  public Target target = new Target() {
+//        @Override
+//        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//
+//            SharePhoto sharePhoto = new SharePhoto.Builder()
+//                    .setBitmap(bitmap)
+//                    .build();
+//
+//            if(ShareDialog.canShow(SharePhotoContent.class))
+//            {
+//
+//                SharePhotoContent content = new SharePhotoContent.Builder()
+//                        .addPhoto(sharePhoto)
+//                        .build();
+//                shareDialog.show(content);
+//            }
+//      }
+//
+//        @Override
+//        public void onBitmapFailed(Drawable errorDrawable) {
+//
+//        }
+//
+//        @Override
+//        public void onPrepareLoad(Drawable placeHolderDrawable) {
+//
+//        }
+//    };
 
 
 
@@ -104,7 +104,7 @@ public class facebook extends AppCompatActivity {
         button_share_link = (Button)findViewById(R.id.button_share_link);
 
         //share photo button
-        button_share_Photo = findViewById(R.id.button_share_Photo);
+        //button_share_Photo = findViewById(R.id.button_share_Photo);
 
         // initializing facebook
         callbackManager = CallbackManager.Factory.create();
@@ -184,38 +184,38 @@ public class facebook extends AppCompatActivity {
         });
 
         //for sharing the photo
-        button_share_Photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-                    @Override
-                    public void onSuccess(Sharer.Result result) {
-                        Toast.makeText( facebook.this, "Share successful", Toast.LENGTH_SHORT).show();
-
-                Picasso.with(getBaseContext())
-                        .load(Uri.parse("http://www.myconfinedspace.com/2015/03/31/vector-batman/vector-batman-jpg/"))
-                        .into(target);
-
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText( facebook.this, "Share cancel", Toast.LENGTH_SHORT).show();
-
-                    }
-
-                    @Override
-                    public void onError(FacebookException error) {
-                        Toast.makeText( facebook.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
-            }
-        });
+//        button_share_Photo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//                shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+//                    @Override
+//                    public void onSuccess(Sharer.Result result) {
+//                        Toast.makeText( facebook.this, "Share successful", Toast.LENGTH_SHORT).show();
+//
+//                Picasso.with(getBaseContext())
+//                        .load(Uri.parse("http://www.myconfinedspace.com/2015/03/31/vector-batman/vector-batman-jpg/"))
+//                        .into(target);
+//
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancel() {
+//                        Toast.makeText( facebook.this, "Share cancel", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(FacebookException error) {
+//                        Toast.makeText( facebook.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
+//
+// //           }
+////        });
 
 
 
@@ -237,31 +237,31 @@ public class facebook extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
 
 
-       if (resultCode == RESULT_OK) {
-            if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
-
-                Bitmap image = null;
-                try {
-                    image = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                SharePhoto photo = new SharePhoto.Builder()
-                        .setBitmap(image)
-                        .build();
-
-                if (ShareDialog.canShow(SharePhotoContent.class)) {
-                    SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
-                            .addPhoto(photo)
-                            .build();
-
-                    shareDialog.show(sharePhotoContent);
-                }
-            }
-        }
+//       if (resultCode == RESULT_OK) {
+//            if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+//
+//                Bitmap image = null;
+//                try {
+//                    image = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                SharePhoto photo = new SharePhoto.Builder()
+//                        .setBitmap(image)
+//                        .build();
+//
+//                if (ShareDialog.canShow(SharePhotoContent.class)) {
+//                    SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+//                            .addPhoto(photo)
+//                            .build();
+//
+//                    shareDialog.show(sharePhotoContent);
+//                }
+//            }
+//        }
     }
 
  //  AccessTokenTracker tokenTracker = new AccessTokenTracker() {

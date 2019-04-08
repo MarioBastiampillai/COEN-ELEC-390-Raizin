@@ -71,7 +71,7 @@
         app:layout_constraintVertical_bias="0.595"
         tools:ignore="MissingConstraints,UselessLeaf"
         tools:layout_editor_absoluteX="16dp" />
-
+<!--
     <Button
         android:id="@+id/button_share_Photo"
         android:layout_width="match_parent"
@@ -109,7 +109,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.422"
         tools:ignore="MissingConstraints" />
-
+-->
 
 
 </android.support.constraint.ConstraintLayout>

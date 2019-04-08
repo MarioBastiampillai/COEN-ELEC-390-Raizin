@@ -84,14 +84,14 @@ public class HomeFeed extends AppCompatActivity{
         UVDisplayObject = (TextView) findViewById(R.id.UVDisplay);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButtonID);
 
-        lFbButton = findViewById(R.id.login_button);
+        /*lFbButton = findViewById(R.id.login_button);
         lFbButton = (Button) findViewById(R.id.login_button);
         lFbButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 Intent intent = new Intent(getApplicationContext(), facebook.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
 
 
@@ -144,6 +144,9 @@ public class HomeFeed extends AppCompatActivity{
                             case R.id.nav_logout:
                                 Intent intentLoginorSignUpActivity = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
                                 startActivity(intentLoginorSignUpActivity);
+                            case R.id.nav_shareToFacebook:
+                                Intent intentFacebook = new Intent(getApplicationContext(), facebook.class);
+                                startActivity(intentFacebook);
                         }
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
