@@ -48,15 +48,14 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
         String buttonTxt = "N/A";
         if (currentScoreTrack >= 0 && currentScoreTrack < 8){
             fitzpatrickType = "Type 1";
-            link = "https://www.amazon.ca/Banana-Boat-Performance-Ultra-Lightweight-Sunscreen/dp/B01BM5UKQU/" +
-                    "ref=sr_1_6?keywords=spf+30&qid=1554603584&refinements=p_72%3A11192170011&rnid=11192166011&s=gateway&sr=8-6";
+            link = "https://www.amazon.ca/Banana-Boat-Performance-Ultra-Lightweight-Sunscreen/dp/B01BM5UP4C/ref=cm_cr_arp_d_product_top?ie=UTF8";
 
             gii1 = "This skin type is believed to be highly susceptible to premature ageing and skin cancers " +
                     "and one is therefore advised to take extreme care, " +
                     "use sunscreen and protect yourself from harmful UV rays as extreme sun exposure can result in serious damage";
 
             gii2 = "Individuals with this skin type should stay out of the sun during the peak hours of 10am - 4pm," +
-                    "wear a high SPF 30 sunscreen every day and re apply it at lunchtime";
+                    "wear a high SPF 50 sunscreen every day and re apply it at lunchtime";
 
             gii3 = "Wear sunglasses that provide UVA protection as UVA exposure can cause cataracts. " +
                     "Tanning beds and booth are prohibited and contraindicated at all times as they have a high intensity of UV output ";
@@ -64,15 +63,14 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
         }
         if (currentScoreTrack >= 8 && currentScoreTrack < 17){
             fitzpatrickType = "Type 2";
-            link = "https://www.amazon.ca/Banana-Boat-Performance-Ultra-Lightweight-Sunscreen/dp/B01BM5UKQU/" +
-                    "ref=sr_1_6?keywords=spf+30&qid=1554603584&refinements=p_72%3A11192170011&rnid=11192166011&s=gateway&sr=8-6";
+            link = "https://www.amazon.ca/Banana-Boat-Performance-Ultra-Lightweight-Sunscreen/dp/B01BM5UP4C/ref=cm_cr_arp_d_product_top?ie=UTF8";
 
             gii1 = "This skin type manage to get a light tan with repeated exposure to sun." +
                     " These skin types are therefore advised to take extreme care, " +
                     "use sunscreen and protect themselves from harmful UV rays as extreme sun exposure can result in serious damage";
 
             gii2 = "Individuals with this skin type should stay out of the sun during the peak hours of 10am - 4pm, " +
-                    "wear a high SPF 30 sunscreen every day and re apply it at lunchtime";
+                    "wear a high SPF 50 sunscreen every day and re apply it at lunchtime";
 
             gii3 = "Wear sunglasses that provide UVA protection as UVA exposure can cause cataracts. " +
                     "Avoid tanning beds and booth at all times as they have a high intensity of UV output";
