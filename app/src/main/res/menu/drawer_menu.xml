@@ -7,8 +7,11 @@
         <item android:id="@+id/nav_information"
             android:icon="@drawable/ic_information"
             android:title="General Information"/>
+        <item android:id="@+id/nav_shareToFacebook"
+            android:title="Share to Facebook"/>
         <item android:id="@+id/nav_logout"
             android:icon="@drawable/ic_account_box"
             android:title="Logout"/>
+
     </group>
 </menu>
