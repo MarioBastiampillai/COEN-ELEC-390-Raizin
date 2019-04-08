@@ -45,7 +45,6 @@ public class HomeFeed extends AppCompatActivity{
 
     public int totalReapplyTimeMilli;
     String callingActivity;
-    int currentScoreTrack;
     FloatingActionButton floatingActionButton;
     public TextView skinTypeDisplayObject;
     private DrawerLayout drawer;
@@ -305,4 +304,3 @@ public class HomeFeed extends AppCompatActivity{
     }
 
 }
-
