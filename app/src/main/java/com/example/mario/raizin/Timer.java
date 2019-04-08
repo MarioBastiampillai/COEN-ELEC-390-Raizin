@@ -42,7 +42,7 @@ public class Timer extends AppCompatActivity {
         if (StateSingleton.instance().getUV()!=null ){
             UVindex =  Double.parseDouble(StateSingleton.instance().getUV());
         }
-        
+
         // SKIN TYPE 1 - 2 - 3 ***
         if(UVindex >= 0 && UVindex <2 && fitzpatrickType >= 0 && fitzpatrickType <25){
             recommendedTime = 120;
