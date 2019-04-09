@@ -1,6 +1,9 @@
 package com.example.mario.raizin;
 
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +43,9 @@ public class facebook extends AppCompatActivity {
     private TextView info;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
+    String fitzpatrickType = null;
+    SharedPreferences sharedPreferences;
+    //facebook login
     private CircleImageView circleImageView;
 
     Button button_share_link, button_share_Photo;
@@ -115,12 +121,14 @@ public class facebook extends AppCompatActivity {
                         Toast.makeText( facebook.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
+                sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                fitzpatrickType = sharedPreferences.getString("skinTypeKey", "N/A");
                 ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                        .setQuote("this is useful link")
-                        .setContentUrl(Uri.parse("http://youtube.com"))
-                        .build();
-                if(ShareDialog.canShow(ShareLinkContent.class)){
+                            .setQuote("Howdy! Spending quality time outside and getting the right care for my skin of"  + fitzpatrickType
+                            + " with the #Raizin app!")
+                            .setContentUrl(Uri.parse("http://www.bananaboat.ca"))
+                            .build();
+                    if(ShareDialog.canShow(ShareLinkContent.class)){
 
                     shareDialog.show(linkContent);
                 }
