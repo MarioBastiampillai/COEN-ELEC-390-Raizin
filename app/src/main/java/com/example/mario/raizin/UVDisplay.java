@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -40,6 +41,12 @@ public class UVDisplay extends AppCompatActivity {
 
     ImageView sun1;
     Button Disconnect;
+
+    @Override
+    public void onBackPressed()
+    {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

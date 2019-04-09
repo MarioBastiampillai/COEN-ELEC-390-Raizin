@@ -18,8 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".facebook" />
-        <activity android:name=".UVDisplay" />
-        <activity android:name=".DeviceList" />
+        <activity android:name=".UVDisplay"
+             />
+        <activity android:name=".DeviceList"
+            android:parentActivityName=".HomeFeed" />
         <activity android:name=".userPersonalization" />
         <activity
             android:name=".indexPage"
