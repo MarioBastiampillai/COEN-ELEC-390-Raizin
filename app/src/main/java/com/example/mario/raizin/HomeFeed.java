@@ -174,7 +174,7 @@ public class HomeFeed extends AppCompatActivity{
         }
         else {
 
-            UVDisplayObject.setText(StateSingleton.instance().getUV());
+            UVDisplayObject.setText("UV index: "+StateSingleton.instance().getUV());
         }
         Intent intent = getIntent();
 
