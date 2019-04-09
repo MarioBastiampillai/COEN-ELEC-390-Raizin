@@ -176,8 +176,10 @@
                 android:text="Warning! The UV index measured is dangerously high. Consider drinking additional water and spending less time outside today."
                 app:layout_constraintBottom_toTopOf="@+id/stopTimerButton"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.537"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:layout_constraintVertical_bias="0.705" />
             <!--//facebook-->
            <!-- <Button
                 android:id="@+id/login_button"
