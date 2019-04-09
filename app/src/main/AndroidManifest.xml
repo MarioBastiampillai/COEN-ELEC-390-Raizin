@@ -59,7 +59,6 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-            android:parentActivityName=".Timer" />
         <activity android:name=".LoginorSignUpActivity"></activity>
     </application>
 
