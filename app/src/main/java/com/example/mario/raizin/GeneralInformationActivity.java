@@ -48,7 +48,6 @@ public class GeneralInformationActivity extends AppCompatActivity {
 
         shoppingButton  = findViewById(R.id.shoppingButton);
         shoppingButton.setText(buttonTxt);
-        Toast.makeText(getApplicationContext(),buttonTxt, Toast.LENGTH_SHORT).show();
 
         shoppingButton.setOnClickListener(new View.OnClickListener() {
             @Override

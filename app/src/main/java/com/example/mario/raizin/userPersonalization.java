@@ -239,7 +239,7 @@ public class userPersonalization extends AppCompatActivity implements AdapterVie
                             + sScore7 + sScore8
                             + sScore9 + sScore10 -10;
 
-                    Toast.makeText(getApplicationContext(), String.valueOf(scoreTrack), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), String.valueOf(scoreTrack), Toast.LENGTH_SHORT).show();
 
                     skinTypeDetermination(scoreTrack);
 
