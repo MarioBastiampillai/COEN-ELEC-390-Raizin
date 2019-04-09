@@ -17,14 +17,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".facebook" />
-        <activity android:name=".UVDisplay" />
-        <activity android:name=".DeviceList" />
-        <activity android:name=".userPersonalization" />
+        <activity android:name=".facebook"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".UVDisplay"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DeviceList"
+            android:parentActivityName=".HomeFeed"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".userPersonalization"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".indexPage"
             android:screenOrientation="portrait" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +56,8 @@
             android:parentActivityName=".TimeOutsideActivity" />
         <activity
             android:name=".CustomTimer"
-            android:parentActivityName=".Timer" /> <!-- //facebook -->
+            android:parentActivityName=".Timer"
+            android:screenOrientation="portrait"/> <!-- //facebook -->
         <provider
             android:authorities="com.facebook.app.FacebookContentProvider498012024065361"
             android:name="com.facebook.FacebookContentProvider"
@@ -59,7 +66,8 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <activity android:name=".LoginorSignUpActivity"></activity>
+        <activity android:name=".LoginorSignUpActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
