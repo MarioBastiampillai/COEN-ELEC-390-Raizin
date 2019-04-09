@@ -124,7 +124,7 @@ public class facebook extends AppCompatActivity {
                 sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                 fitzpatrickType = sharedPreferences.getString("skinTypeKey", "N/A");
                 ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                            .setQuote("Howdy! Spending quality time outside and getting the right care for my skin of"  + fitzpatrickType
+                            .setQuote("Howdy! Spending quality time outside and getting the right care for my skin of "  + fitzpatrickType
                             + " with the #Raizin app!")
                             .setContentUrl(Uri.parse("http://www.bananaboat.ca"))
                             .build();
