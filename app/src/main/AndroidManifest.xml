@@ -53,7 +53,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Timer"
-            android:parentActivityName=".TimeOutsideActivity" />
+            android:parentActivityName=".TimeOutsideActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CustomTimer"
             android:parentActivityName=".Timer"
