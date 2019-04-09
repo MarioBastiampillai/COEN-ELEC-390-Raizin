@@ -42,10 +42,16 @@ public class CustomTimer extends AppCompatActivity {
     public void setTimerClick(View view){
         String reapplyTimeMinutesString = customMinutesEditText.getText().toString();
 
-
-        if(reapplyTimeMinutesString.isEmpty() || reapplyTimeMinutesString.length() == 0 || reapplyTimeMinutesString.equals("") || reapplyTimeMinutesString == null){
-            Toast.makeText(getApplicationContext(),"Enter a valid time.",Toast.LENGTH_SHORT).show();
+        int mins = Integer.parseInt(reapplyTimeMinutesString);
+        if(reapplyTimeMinutesString.isEmpty() || (mins > 1440) || reapplyTimeMinutesString.length() == 0 || reapplyTimeMinutesString.equals("") || reapplyTimeMinutesString == null){
+            if(mins > 1440){
+                Toast.makeText(getApplicationContext(),"Maximum time allowed is 1440 minutes.",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(),"Enter a valid time.",Toast.LENGTH_SHORT).show();
+            }
         }
+
         else{
             int reapplyTimeMinutes = Integer.parseInt(reapplyTimeMinutesString);
             if(reapplyTimeMinutes > 0) {

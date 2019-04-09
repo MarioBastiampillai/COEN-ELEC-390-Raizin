@@ -2,6 +2,9 @@ package com.example.mario.raizin;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +27,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Set;
 
 
 public class HomeFeed extends AppCompatActivity{
@@ -32,6 +36,7 @@ public class HomeFeed extends AppCompatActivity{
 
     Button uvButton;
     double measuredUVIndex = -1;
+    private ProgressDialog progress;
 
     private TextView countDownText;
     private TextView timeUntilReapplyTextView;
@@ -45,12 +50,12 @@ public class HomeFeed extends AppCompatActivity{
 
     public int totalReapplyTimeMilli;
     String callingActivity;
-    int currentScoreTrack;
     FloatingActionButton floatingActionButton;
     public TextView skinTypeDisplayObject;
     private DrawerLayout drawer;
     SharedPreferences sharedPreferences;
     Button stopTimerButton;
+    Button lFbButton;
     String skinTypeGet;
 
     @Override
@@ -60,7 +65,7 @@ public class HomeFeed extends AppCompatActivity{
         {
             drawer.closeDrawer(GravityCompat.START);
         }else{
-            super.onBackPressed();
+
         }
 
     }
@@ -77,6 +82,18 @@ public class HomeFeed extends AppCompatActivity{
         uvButton = (Button) findViewById(R.id.uvButton);
         UVDisplayObject = (TextView) findViewById(R.id.UVDisplay);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButtonID);
+
+        /*lFbButton = findViewById(R.id.login_button);
+        lFbButton = (Button) findViewById(R.id.login_button);
+        lFbButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent intent = new Intent(getApplicationContext(), facebook.class);
+                startActivity(intent);
+            }
+        });*/
+
+
+
         warningTextView = findViewById(R.id.warningTextView);
         countDownText = findViewById(R.id.countdown_text);
         timeUntilReapplyTextView = findViewById(R.id.timeUntilReapplyTextView);
@@ -123,9 +140,14 @@ public class HomeFeed extends AppCompatActivity{
                                 Intent intent = new Intent(getApplicationContext(), GeneralInformationActivity.class);
                                 startActivity(intent);
                                 break;
+                            case R.id.nav_shareToFacebook:
+                                Intent intentFacebook = new Intent(getApplicationContext(), facebook.class);
+                                startActivity(intentFacebook);
+                                break;
                             case R.id.nav_logout:
                                 Intent intentLoginorSignUpActivity = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
                                 startActivity(intentLoginorSignUpActivity);
+                                break;
                         }
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
@@ -140,20 +162,20 @@ public class HomeFeed extends AppCompatActivity{
 
         if(measuredUVIndex >= 8)
             warningTextView.setVisibility(View.VISIBLE);
-        else{
+        else {
             warningTextView.setVisibility(View.INVISIBLE);
         }
 
         if(!timerRunning){
             stopTimerButton.setVisibility(View.GONE);
         }
-            if (StateSingleton.instance().getUV()==null ){
-                UVDisplayObject.setText("");
-            }
-            else {
+        if (StateSingleton.instance().getUV()==null ){
+            UVDisplayObject.setText("");
+        }
+        else {
 
-                UVDisplayObject.setText(StateSingleton.instance().getUV());
-            }
+            UVDisplayObject.setText(StateSingleton.instance().getUV());
+        }
         Intent intent = getIntent();
 
         callingActivity = intent.getStringExtra("FROM_ACTIVITY");
@@ -256,9 +278,9 @@ public class HomeFeed extends AppCompatActivity{
 
 
     public void TimerSetup(String timer, int time){
-            timeLeftInMilliReapply = time;
-            startTimer(timer);
-            timeUntilReapplyTextView.setText("Time until next Reapply:");
+        timeLeftInMilliReapply = time;
+        startTimer(timer);
+        timeUntilReapplyTextView.setText("Time until next Reapply:");
     }
 
     //Android documentation https://developer.android.com/training/notify-user/build-notification
@@ -305,4 +327,3 @@ public class HomeFeed extends AppCompatActivity{
     }
 
 }
-

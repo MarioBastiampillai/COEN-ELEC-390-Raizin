@@ -17,8 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UVDisplay"></activity>
-        <activity android:name=".DeviceList" />
+        <activity android:name=".facebook" />
+        <activity android:name=".UVDisplay"
+             />
+        <activity android:name=".DeviceList"
+            android:parentActivityName=".HomeFeed" />
         <activity android:name=".userPersonalization" />
         <activity
             android:name=".indexPage"
@@ -29,7 +32,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity> <!-- //facebook -->
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" /> <!-- //facebook -->
         <activity
             android:name=".HomeFeed"
             android:screenOrientation="portrait"
@@ -45,7 +52,15 @@
             android:parentActivityName=".TimeOutsideActivity" />
         <activity
             android:name=".CustomTimer"
-            android:parentActivityName=".Timer" />
+            android:parentActivityName=".Timer" /> <!-- //facebook -->
+        <provider
+            android:authorities="com.facebook.app.FacebookContentProvider498012024065361"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
         <activity android:name=".LoginorSignUpActivity"></activity>
     </application>
 
