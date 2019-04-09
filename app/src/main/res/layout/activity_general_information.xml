@@ -11,10 +11,12 @@
         android:id="@+id/gi3"
         android:layout_width="383dp"
         android:layout_height="83dp"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="casual"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance.Theme.Dialog"
+        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@+id/gi2"
         tools:layout_editor_absoluteX="6dp" />
 
@@ -22,10 +24,12 @@
         android:id="@+id/gi2"
         android:layout_width="379dp"
         android:layout_height="85dp"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="casual"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance.Theme.Dialog"
+        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@+id/gi1"
         tools:layout_editor_absoluteX="6dp" />
 
@@ -75,10 +79,12 @@
         android:id="@+id/gi1"
         android:layout_width="378dp"
         android:layout_height="129dp"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="casual"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance.Theme.Dialog"
+        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@+id/fitzDisplay"
         tools:layout_editor_absoluteX="6dp" />
 
