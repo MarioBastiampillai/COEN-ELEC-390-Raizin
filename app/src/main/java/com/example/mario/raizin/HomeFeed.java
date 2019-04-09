@@ -65,7 +65,7 @@ public class HomeFeed extends AppCompatActivity{
         {
             drawer.closeDrawer(GravityCompat.START);
         }else{
-            super.onBackPressed();
+
         }
 
     }
