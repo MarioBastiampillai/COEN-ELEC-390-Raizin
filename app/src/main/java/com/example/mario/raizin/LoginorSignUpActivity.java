@@ -3,7 +3,6 @@ package com.example.mario.raizin;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -34,7 +33,7 @@ public class LoginorSignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginor_sign_up);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         editTextObject=(EditText)findViewById(R.id.userName);
         buttonObject=(Button)findViewById(R.id.userNameButton);
         startInstruction=(TextView)findViewById(R.id.firstInstructionDisplay);
