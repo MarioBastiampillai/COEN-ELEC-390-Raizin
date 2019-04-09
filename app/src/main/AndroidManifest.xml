@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".facebook" />
         <activity android:name=".UVDisplay"
-            android:parentActivityName=".DeviceList" />
+             />
         <activity android:name=".DeviceList"
             android:parentActivityName=".HomeFeed" />
         <activity android:name=".userPersonalization" />
