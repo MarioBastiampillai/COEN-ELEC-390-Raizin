@@ -5,101 +5,62 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.provider.MediaStore;
 import java.io.IOException;
+import java.util.Arrays;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class facebook extends AppCompatActivity {
 
-
-    //facebook login
     private TextView info;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     String fitzpatrickType = null;
     SharedPreferences sharedPreferences;
     //facebook login
-
-    //facebook share link, share photo
+    private CircleImageView circleImageView;
 
     Button button_share_link, button_share_Photo;
     ShareDialog shareDialog;
-    private Object view;
 
     private int PICK_IMAGE_REQUEST = 1;
-
-    //facebook share link, share photo
-
-//  public Target target = new Target() {
-//        @Override
-//        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//
-//            SharePhoto sharePhoto = new SharePhoto.Builder()
-//                    .setBitmap(bitmap)
-//                    .build();
-//
-//            if(ShareDialog.canShow(SharePhotoContent.class))
-//            {
-//
-//                SharePhotoContent content = new SharePhotoContent.Builder()
-//                        .addPhoto(sharePhoto)
-//                        .build();
-//                shareDialog.show(content);
-//            }
-//      }
-//
-//        @Override
-//        public void onBitmapFailed(Drawable errorDrawable) {
-//
-//        }
-//
-//        @Override
-//        public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//        }
-//    };
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_facebook);
 
+        circleImageView = findViewById(R.id.profile_pic);
+
+        info = (TextView) findViewById(R.id.info);
 
         //login facebook button
         loginButton = findViewById(R.id.login_button);
@@ -108,41 +69,31 @@ public class facebook extends AppCompatActivity {
         button_share_link = (Button)findViewById(R.id.button_share_link);
 
         //share photo button
-        //button_share_Photo = findViewById(R.id.button_share_Photo);
+        button_share_Photo = findViewById(R.id.button_share_Photo);
 
         // initializing facebook
         callbackManager = CallbackManager.Factory.create();
 
         shareDialog = new ShareDialog(this);
 
+        loginButton.setReadPermissions(Arrays.asList("email","public_profile"));
+
         checkLoginStatus();
-
-        info = (TextView) findViewById(R.id.info);
-
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult)
-           {
-                info.setText(
-                        "User ID: "
-                                + loginResult.getAccessToken().getUserId()
-                                + "\n" +
-                                "Auth Token: "
-                                + loginResult.getAccessToken().getToken()
-                );
+            public void onSuccess(LoginResult loginResult) {
+                loaduserProfile(AccessToken.getCurrentAccessToken());
             }
 
             @Override
             public void onCancel() {
                 info.setText("Login attempt canceled.");
-
             }
 
             @Override
             public void onError(FacebookException error) {
                 info.setText("Login attempt failed.");
-
             }
         });
 
@@ -158,19 +109,16 @@ public class facebook extends AppCompatActivity {
                     @Override
                     public void onSuccess(Sharer.Result result) {
                         Toast.makeText( facebook.this, "Share successful", Toast.LENGTH_SHORT).show();
-
                     }
 
                     @Override
                     public void onCancel() {
                         Toast.makeText( facebook.this, "Share cancel", Toast.LENGTH_SHORT).show();
-
                     }
 
                     @Override
                     public void onError(FacebookException error) {
                         Toast.makeText( facebook.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-
                     }
                 });
                 sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
@@ -182,48 +130,11 @@ public class facebook extends AppCompatActivity {
                             .build();
                     if(ShareDialog.canShow(ShareLinkContent.class)){
 
-                        shareDialog.show(linkContent);
-                    }
-
+                    shareDialog.show(linkContent);
+                }
 
             }
         });
-
-        //for sharing the photo
-//        button_share_Photo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//                shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-//                    @Override
-//                    public void onSuccess(Sharer.Result result) {
-//                        Toast.makeText( facebook.this, "Share successful", Toast.LENGTH_SHORT).show();
-//
-//                Picasso.with(getBaseContext())
-//                        .load(Uri.parse("http://www.myconfinedspace.com/2015/03/31/vector-batman/vector-batman-jpg/"))
-//                        .into(target);
-//
-//
-//                    }
-//
-//                    @Override
-//                    public void onCancel() {
-//                        Toast.makeText( facebook.this, "Share cancel", Toast.LENGTH_SHORT).show();
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(FacebookException error) {
-//                        Toast.makeText( facebook.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-//
-//                    }
-//                });
-//
-// //           }
-////        });
-
-
 
     }
 
@@ -234,60 +145,35 @@ public class facebook extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-
-
-//facebook share
-
-
-    //facebook login
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
-//        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+
+                Bitmap image = null;
+                try {
+                    image = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(image)
+                        .build();
+
+                SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+                        .addPhoto(photo)
+                        .build();
 
 
-//       if (resultCode == RESULT_OK) {
-//            if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
-//
-//                Bitmap image = null;
-//                try {
-//                    image = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                SharePhoto photo = new SharePhoto.Builder()
-//                        .setBitmap(image)
-//                        .build();
-//
-//                if (ShareDialog.canShow(SharePhotoContent.class)) {
-//                    SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
-//                            .addPhoto(photo)
-//                            .build();
-//
-//                    shareDialog.show(sharePhotoContent);
-//                }
-//            }
-//        }
+                if (ShareDialog.canShow(SharePhotoContent.class)) {
+                    shareDialog.show(sharePhotoContent);
+                }
+            }
+        }
     }
-
- //  AccessTokenTracker tokenTracker = new AccessTokenTracker() {
- //      @Override
- //      protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
- //      {
- //          if(currentAccessToken==null)
- //          {
- //              txtName.setText("");
- //              txtEmail.setText("");
- //              circleImageView.setImageResource(0);
- //              Toast.makeText(MainActivity.this,"User Logged out",Toast.LENGTH_LONG).show();
- //          }
- //          else
- //              loaduserProfile(currentAccessToken);
-
- //      }
- //};
-
-
 
     private void loaduserProfile(AccessToken newAccessToken) {
 
@@ -297,15 +183,14 @@ public class facebook extends AppCompatActivity {
                 try {
                     String first_name = object.getString("first_name");
                     String last_name = object.getString("last_name");
-                    String email = object.getString("email");
                     String id = object.getString("id");
-                    String image_url = "https://graph.facebook.com/"+id+ "/picture?type=normal";
+                    String image_url = "https://graph.facebook.com/" + id + "/picture?type=large";
 
+                    info.setText(first_name + " " + last_name);
+                    RequestOptions requestOptions = new RequestOptions();
+                    requestOptions.dontAnimate();
 
-//                    txtEmail.setText(email);
-                    info.setText(first_name + " " +last_name);
-
-//                    Glide.with(MainActivity.this).load(image_url).into(circleImageView);
+                    Glide.with(facebook.this).load(image_url).into(circleImageView);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -321,15 +206,65 @@ public class facebook extends AppCompatActivity {
 
     }
 
-    private void checkLoginStatus()
-    {
+    private void checkLoginStatus() {
         if(AccessToken.getCurrentAccessToken()!=null)
         {
             loaduserProfile(AccessToken.getCurrentAccessToken());
+            button_share_link.setVisibility(View.VISIBLE);
+            button_share_Photo.setVisibility(View.VISIBLE);
+        }
+        else{
+            button_share_link.setVisibility(View.INVISIBLE);
+            button_share_Photo.setVisibility(View.INVISIBLE);
         }
     }
 
-//facebook login
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (AccessToken.getCurrentAccessToken() != null) {
+            button_share_link.setVisibility(View.VISIBLE);
+            button_share_Photo.setVisibility(View.VISIBLE);
+        } else {
+            button_share_link.setVisibility(View.INVISIBLE);
+            button_share_Photo.setVisibility(View.INVISIBLE);
+        }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (AccessToken.getCurrentAccessToken() != null) {
+            button_share_link.setVisibility(View.VISIBLE);
+            button_share_Photo.setVisibility(View.VISIBLE);
+        } else {
+            button_share_link.setVisibility(View.INVISIBLE);
+            button_share_Photo.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (AccessToken.getCurrentAccessToken() != null) {
+            button_share_link.setVisibility(View.VISIBLE);
+            button_share_Photo.setVisibility(View.VISIBLE);
+        } else {
+            button_share_link.setVisibility(View.INVISIBLE);
+            button_share_Photo.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (AccessToken.getCurrentAccessToken() != null) {
+            button_share_link.setVisibility(View.VISIBLE);
+            button_share_Photo.setVisibility(View.VISIBLE);
+        } else {
+            button_share_link.setVisibility(View.INVISIBLE);
+            button_share_Photo.setVisibility(View.INVISIBLE);
+        }
+    }
 
 }
