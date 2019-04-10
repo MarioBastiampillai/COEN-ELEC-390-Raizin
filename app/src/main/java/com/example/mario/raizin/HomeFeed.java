@@ -203,8 +203,12 @@ public class HomeFeed extends AppCompatActivity{
 
         uvButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-                Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-                startActivity(intent);
+                if(timerRunning)
+                    Toast.makeText(getApplicationContext(),"You must stop the current timer before you can measure UV.",Toast.LENGTH_SHORT).show();
+                else{
+                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                    startActivity(intent);
+                }
             }
         });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
