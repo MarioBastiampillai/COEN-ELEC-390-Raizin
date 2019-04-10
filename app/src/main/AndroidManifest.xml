@@ -18,7 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".facebook"
-            android:parentActivityName=".HomeFeed"
             android:screenOrientation="portrait"/>
         <activity android:name=".UVDisplay"
             android:screenOrientation="portrait"/>
@@ -48,7 +47,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".GeneralInformationActivity"
-            android:parentActivityName=".HomeFeed"
             android:screenOrientation="portrait" />
         <activity
             android:name=".TimeOutsideActivity"
