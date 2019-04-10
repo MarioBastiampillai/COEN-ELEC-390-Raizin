@@ -164,7 +164,7 @@ public class HomeFeed extends AppCompatActivity{
 
         createNotificationChannel();
 
-        if(measuredUVIndex >= 8)
+        if(measuredUVIndex >= 6)
             warningTextView.setVisibility(View.VISIBLE);
         else {
             warningTextView.setVisibility(View.INVISIBLE);
