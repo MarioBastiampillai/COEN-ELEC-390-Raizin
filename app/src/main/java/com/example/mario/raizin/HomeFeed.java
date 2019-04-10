@@ -145,9 +145,13 @@ public class HomeFeed extends AppCompatActivity{
                                 startActivity(intentFacebook);
                                 break;
                             case R.id.nav_logout:
-                                Intent intentLoginorSignUpActivity = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
-                                startActivity(intentLoginorSignUpActivity);
-                                break;
+                                if(timerRunning)
+                                    Toast.makeText(getApplicationContext(),"You must stop the current timer before you can log out.",Toast.LENGTH_SHORT).show();
+                                else{
+                                    Intent intentLoginorSignUpActivity = new Intent(getApplicationContext(), LoginorSignUpActivity.class);
+                                    startActivity(intentLoginorSignUpActivity);
+                                    break;
+                                }
                         }
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
@@ -199,8 +203,12 @@ public class HomeFeed extends AppCompatActivity{
 
         uvButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-                Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-                startActivity(intent);
+                if(timerRunning)
+                    Toast.makeText(getApplicationContext(),"You must stop the current timer before you can measure UV.",Toast.LENGTH_SHORT).show();
+                else{
+                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                    startActivity(intent);
+                }
             }
         });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -319,7 +327,7 @@ public class HomeFeed extends AppCompatActivity{
         super.onResume();
         if(StateSingleton.instance().getUV()!=null)
             measuredUVIndex = Double.parseDouble(StateSingleton.instance().getUV());
-        if(measuredUVIndex >= 1)
+        if(measuredUVIndex >= 8)
             warningTextView.setVisibility(View.VISIBLE);
         else{
             warningTextView.setVisibility(View.INVISIBLE);
