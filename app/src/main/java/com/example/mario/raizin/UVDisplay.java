@@ -109,7 +109,7 @@ public class UVDisplay extends AppCompatActivity {
         //InputStream in;
         int bytes; //number of bytes read
         byte[] buffer = new byte[4]; //read 4 bytes from bluetooth to store 1 float
-        byte[] buffer2 = new byte[100];
+        //byte[] buffer2 = new byte[100];
         //String bluetoothSerial=null;
         try {
             if (!(btSocket == null)) {

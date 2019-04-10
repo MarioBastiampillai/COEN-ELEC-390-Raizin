@@ -9,8 +9,8 @@
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="386dp"
+        android:layout_height="52dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -18,7 +18,9 @@
 
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:fontFamily="casual"
         android:text="How oftend do you want to reapply sunscreen?"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/customMinutesEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,12 +51,15 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:fontFamily="casual"
         android:text="Minutes"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/setTimerButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toEndOf="@+id/customMinutesEditText"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.351" />
+        app:layout_constraintVertical_bias="0.581" />
 
     <Button
         android:id="@+id/cancelButton"
